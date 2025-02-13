@@ -1,7 +1,7 @@
 import { ReactElement } from 'react'
 
-import { HelloWorld } from '@/components/Hello'
+import { Redirect } from '@/components/Redirect'
 
 export default async function Page(): Promise<ReactElement> {
-    return <HelloWorld />
+    return <Redirect />
 }

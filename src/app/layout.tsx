@@ -17,7 +17,6 @@ export default async function RootLayout({ children }: Readonly<PropsWithChildre
         <html lang="en">
             <body>
                 <Header />
-
                 {children}
             </body>
         </html>
