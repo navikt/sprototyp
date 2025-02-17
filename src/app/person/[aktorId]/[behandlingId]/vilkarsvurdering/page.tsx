@@ -1,59 +1,108 @@
 'use client'
 
-import { ReactElement } from 'react'
-import { Accordion, Radio, RadioGroup, Table } from '@navikt/ds-react'
+import React, { ReactElement, useState } from 'react'
+import { ExpansionCard, Radio, RadioGroup, Table } from '@navikt/ds-react'
 
 export default function Page(): ReactElement {
     return (
-        <Accordion className="w-full">
-            <Accordion.Item>
-                <Accordion.Header>Generelle bestemmelser</Accordion.Header>
-                <Accordion.Content className="p-0">
-                    {data.map(({ name }, i) => {
-                        return (
-                            <Accordion.Item key={i}>
-                                <Accordion.Header>{name}</Accordion.Header>
-                                <Accordion.Content className="p-0">
-                                    <RadioGroup legend="Er vilkåret oppfylt?">
-                                        <Radio value="10">Ja</Radio>
-                                        <Radio value="20">Nei</Radio>
-                                        <Radio value="40">Uavklart</Radio>
-                                        <Radio value="40">Ikke aktuelt</Radio>
-                                    </RadioGroup>
-                                </Accordion.Content>
-                            </Accordion.Item>
-                        )
-                    })}
-                </Accordion.Content>
-            </Accordion.Item>
-            <Accordion.Item>
-                <Accordion.Header>Arbeidstakere</Accordion.Header>
-                <Accordion.Content className="p-0">
-                    <Table className="mt-10">
-                        <Table.Body>
-                            {data.map(({ name }, i) => {
-                                return (
-                                    <Table.ExpandableRow key={i} content="Innhold i ekspanderbar rad">
-                                        <Table.HeaderCell scope="row">{name}</Table.HeaderCell>
-                                    </Table.ExpandableRow>
-                                )
-                            })}
-                        </Table.Body>
-                    </Table>
-                </Accordion.Content>
-            </Accordion.Item>
-        </Accordion>
+        <div className="mt-4">
+            {vilkar.map(({ gruppe, vilkar }, i) => {
+                return (
+                    <ExpansionCard
+                        key={i}
+                        //  className="[&>*]:border-0 [&>*:hover]:!border-0"
+                        aria-label="Demo med custom styling"
+                        style={
+                            {
+                                '--__ac-expansioncard-border-hover-width': '0px',
+                            } as React.CSSProperties
+                        }
+                    >
+                        <ExpansionCard.Header>
+                            <ExpansionCard.Title>{gruppe}</ExpansionCard.Title>
+                        </ExpansionCard.Header>
+                        <ExpansionCard.Content>
+                            <Table>
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell />
+                                        <Table.HeaderCell scope="col">Vilkår</Table.HeaderCell>
+                                        <Table.HeaderCell scope="col">Vurdering</Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>
+                                    {vilkar.map(({ name }, i) => {
+                                        return <EnkeltVilkarRad name={name} key={i} />
+                                    })}
+                                </Table.Body>
+                            </Table>
+                        </ExpansionCard.Content>
+                    </ExpansionCard>
+                )
+            })}
+        </div>
     )
 }
 
-const data = [
+function EnkeltVilkarRad({ name }: { name: string }) {
+    const [vurdering, setVurdering] = useState<string | null>(null)
+
+    return (
+        <Table.ExpandableRow
+            togglePlacement="right"
+            expandOnRowClick={true}
+            content={
+                <div className="bg-blue-50 p-4">
+                    <RadioGroup
+                        size="small"
+                        legend="Er vilkåret oppfylt?"
+                        value={vurdering}
+                        onChange={(e) => setVurdering(e)}
+                    >
+                        <Radio value="ja">Ja</Radio>
+                        <Radio value="nei">Nei</Radio>
+                        <Radio value="uavklart">Uavklart</Radio>
+                        <Radio value="ikke-aktuelt">Ikke aktuelt</Radio>
+                    </RadioGroup>
+                </div>
+            }
+        >
+            <Table.DataCell scope="row">ikon</Table.DataCell>
+            <Table.DataCell scope="row">{name}</Table.DataCell>
+        </Table.ExpandableRow>
+    )
+}
+
+const vilkar = [
     {
-        name: '§ 8-2 Opptjeningstid',
+        gruppe: 'Generelle bestemmelser',
+        vilkar: [
+            {
+                name: '§ 8-2 Opptjeningstid',
+            },
+            {
+                name: '§ 8-3 Tap av pensjonsgivende inntekt og minsteinntekt ',
+            },
+            {
+                name: '§ 8-4 Arbeidsuførhet',
+            },
+            {
+                name: '§ 8-5 Yrkesmessig uførhet',
+            },
+        ],
     },
     {
-        name: '§ 8-3 Tap av pensjonsgivende inntekt og minsteinntekt ',
-    },
-    {
-        name: '§ 8-4 Arbeidsuførhet',
+        gruppe: 'Arbeidstakere',
+        vilkar: [
+            {
+                name: '§ 8-55 Bla bla',
+            },
+            {
+                name: '§ 8-3 Tap av pensjonsgivende inntekt og minsteinntekt ',
+            },
+            {
+                name: '§ 8-4 Arbeidsuførhet',
+            },
+        ],
     },
 ]
