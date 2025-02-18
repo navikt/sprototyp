@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactElement, useState } from 'react'
-import { ExpansionCard, Radio, RadioGroup, Table } from '@navikt/ds-react'
+import { BodyShort, Radio, RadioGroup, Table } from '@navikt/ds-react'
 import {
     CheckmarkCircleFillIcon,
     XMarkOctagonFillIcon,
@@ -9,41 +9,33 @@ import {
     ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons'
 
+import ExpandableComponent from '@/components/customekspander/EkspanderbarSporto'
+
 export default function Page(): ReactElement {
     return (
         <div className="mt-4">
             {vilkar.map(({ gruppe, vilkar }, i) => {
                 return (
-                    <ExpansionCard
-                        key={i}
-                        //  className="[&>*]:border-0 [&>*:hover]:!border-0"
-                        aria-label="Demo med custom styling"
-                        style={
-                            {
-                                '--__ac-expansioncard-border-hover-width': '0px',
-                            } as React.CSSProperties
-                        }
-                    >
-                        <ExpansionCard.Header>
-                            <ExpansionCard.Title>{gruppe}</ExpansionCard.Title>
-                        </ExpansionCard.Header>
-                        <ExpansionCard.Content>
-                            <Table>
-                                <Table.Header>
-                                    <Table.Row>
-                                        <Table.HeaderCell />
-                                        <Table.HeaderCell scope="col">Vilkår</Table.HeaderCell>
-                                        <Table.HeaderCell scope="col">Vurdering</Table.HeaderCell>
-                                    </Table.Row>
-                                </Table.Header>
-                                <Table.Body>
-                                    {vilkar.map(({ name }, i) => {
-                                        return <EnkeltVilkarRad name={name} key={i} />
-                                    })}
-                                </Table.Body>
-                            </Table>
-                        </ExpansionCard.Content>
-                    </ExpansionCard>
+                    <ExpandableComponent key={i} header={gruppe}>
+                        <Table size="small">
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell />
+                                    <Table.HeaderCell scope="col">
+                                        <BodyShort>Vilkår</BodyShort>
+                                    </Table.HeaderCell>
+                                    <Table.HeaderCell scope="col">
+                                        <BodyShort>Vurdering</BodyShort>
+                                    </Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {vilkar.map(({ name }, i) => {
+                                    return <EnkeltVilkarRad name={name} key={i} />
+                                })}
+                            </Table.Body>
+                        </Table>
+                    </ExpandableComponent>
                 )
             })}
         </div>
@@ -58,7 +50,7 @@ function EnkeltVilkarRad({ name }: { name: string }) {
             togglePlacement="right"
             expandOnRowClick={true}
             content={
-                <div className="bg-blue-50 p-4">
+                <div className="bg-blue-50 p-4 rounded">
                     <RadioGroup
                         size="small"
                         legend="Er vilkåret oppfylt?"
