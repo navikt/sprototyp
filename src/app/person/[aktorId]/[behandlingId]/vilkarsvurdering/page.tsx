@@ -2,6 +2,12 @@
 
 import React, { ReactElement, useState } from 'react'
 import { ExpansionCard, Radio, RadioGroup, Table } from '@navikt/ds-react'
+import {
+    CheckmarkCircleFillIcon,
+    XMarkOctagonFillIcon,
+    QuestionmarkCircleFillIcon,
+    ExclamationmarkTriangleFillIcon,
+} from '@navikt/aksel-icons'
 
 export default function Page(): ReactElement {
     return (
@@ -67,10 +73,27 @@ function EnkeltVilkarRad({ name }: { name: string }) {
                 </div>
             }
         >
-            <Table.DataCell scope="row">ikon</Table.DataCell>
+            <Table.DataCell scope="row">
+                <Ikon vurdering={vurdering} />
+            </Table.DataCell>
             <Table.DataCell scope="row">{name}</Table.DataCell>
         </Table.ExpandableRow>
     )
+}
+
+function Ikon({ vurdering }: { vurdering: string | null }) {
+    switch (vurdering) {
+        case 'ja':
+            return <CheckmarkCircleFillIcon color="var(--a-icon-success)"></CheckmarkCircleFillIcon>
+        case 'nei':
+            return <XMarkOctagonFillIcon color="var(--a-icon-danger)"></XMarkOctagonFillIcon>
+        case 'uavklart':
+            return <QuestionmarkCircleFillIcon color="var(--a-icon-info)"></QuestionmarkCircleFillIcon>
+        case 'ikke-aktuelt':
+            return <ExclamationmarkTriangleFillIcon color="var(--a-icon-warning)"></ExclamationmarkTriangleFillIcon>
+        default:
+            return <QuestionmarkCircleFillIcon color="var(--a-icon-info)"></QuestionmarkCircleFillIcon>
+    }
 }
 
 const vilkar = [
