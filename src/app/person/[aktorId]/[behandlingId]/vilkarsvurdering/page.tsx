@@ -45,6 +45,19 @@ export default function Page(): ReactElement {
 function EnkeltVilkarRad({ name }: { name: string }) {
     const [vurdering, setVurdering] = useState<string | null>(null)
 
+    function oppfyltTekst(vurdering: string | null) {
+        switch (vurdering) {
+            case 'ja':
+                return 'Oppfylt'
+            case 'nei':
+                return 'Ikke oppfylt'
+            case 'uavklart':
+            case 'ikke-aktuelt':
+                return '---'
+        }
+        return null
+    }
+
     return (
         <Table.ExpandableRow
             togglePlacement="right"
@@ -69,6 +82,7 @@ function EnkeltVilkarRad({ name }: { name: string }) {
                 <Ikon vurdering={vurdering} />
             </Table.DataCell>
             <Table.DataCell scope="row">{name}</Table.DataCell>
+            <Table.DataCell scope="row">{oppfyltTekst(vurdering)}</Table.DataCell>
         </Table.ExpandableRow>
     )
 }
