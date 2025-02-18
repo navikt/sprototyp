@@ -3,6 +3,9 @@
 import React, { PropsWithChildren, ReactElement } from 'react'
 
 import { PersonHeaderWithContent } from '@/components/personheader/Personheader'
+import { Saksbilde } from '@/components/saksbilde/Saksbilde'
+import { Venstremeny } from '@/components/venstremeny/Venstremeny'
+import { Historikk } from '@/components/historikk/Historikk'
 
 import styles from './layout.module.css'
 
@@ -17,9 +20,12 @@ export default function Layout({ children }: PropsWithChildren): ReactElement {
     }
 
     return (
-        <div>
+        <div className={styles.Saksbilde}>
             <PersonHeaderWithContent person={person} />
-            <div className={styles.Saksbilde}>{children}</div>
+
+            <Venstremeny />
+            <Saksbilde>{children}</Saksbilde>
+            <Historikk />
         </div>
     )
 }
