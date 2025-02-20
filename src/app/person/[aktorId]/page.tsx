@@ -10,7 +10,7 @@ export default function Page(): ReactElement {
     const pathname = usePathname()
     return (
         <div className="p-16">
-            <Button onClick={() => router.push(pathname + '/' + v4())} variant="secondary-neutral">
+            <Button onClick={() => router.push(pathname + '/behandling/' + v4())} variant="secondary-neutral">
                 Start ny behandling
             </Button>
         </div>
