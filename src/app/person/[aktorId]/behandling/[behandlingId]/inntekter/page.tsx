@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, FormEvent, ReactElement } from 'react'
+import { Button } from '@navikt/ds-react'
 
 interface Arbeidsforhold {
     id: number
@@ -61,9 +62,9 @@ export default function Page(): ReactElement {
                         />
                     </div>
                 )}
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+                <Button type="submit" size="small" variant="secondary-neutral">
                     Legg til
-                </button>
+                </Button>
             </form>
 
             <h2 className="text-xl font-bold mb-2">Liste over arbeidsforhold</h2>

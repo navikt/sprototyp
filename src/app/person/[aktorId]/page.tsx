@@ -17,7 +17,6 @@ export default function Page(): ReactElement {
     return (
         <div className="p-16">
             <Button variant="secondary-neutral" onClick={() => ref.current?.showModal()}>
-                {' '}
                 Start ny behandling
             </Button>
 
