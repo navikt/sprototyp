@@ -1,5 +1,5 @@
 import { useParams } from 'next/navigation'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Behandling } from '@typer/manuellbehandlingtypes'
 
@@ -13,6 +13,7 @@ interface MutationProps {
 
 export function useNyBehandling() {
     const params = useParams()
+    const queryClient = useQueryClient()
 
     return useMutation<Behandling, Error, MutationProps>({
         mutationFn: async (r) => {
@@ -26,6 +27,11 @@ export function useNyBehandling() {
         },
         onSuccess: async (behandling, r) => {
             r.callback(behandling)
+            queryClient
+                .invalidateQueries({
+                    queryKey: ['behandling', params.aktorId],
+                })
+                .catch()
         },
     })
 }
