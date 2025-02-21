@@ -1,12 +1,9 @@
 'use client'
 
 import { ReactElement } from 'react'
-import { usePathname } from 'next/navigation'
-import { Heading } from '@navikt/ds-react'
+
+import { Utbetalingstabell } from '@components/dagoversikt/Utbetalingstabell'
 
 export default function Page(): ReactElement {
-    const pathname = usePathname()
-
-    const lastPath = pathname.split('/').pop()
-    return <Heading size="medium">{lastPath}</Heading>
+    return <Utbetalingstabell fom="2025-01-01" tom="2025-01-25" />
 }
