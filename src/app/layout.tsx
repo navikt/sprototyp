@@ -4,6 +4,7 @@ import React, { PropsWithChildren, ReactElement } from 'react'
 import { erLokal } from '@/env'
 import '../styles/globals.css'
 import { Header } from '@/components/header/Header'
+import Providers from '@/app/providers'
 
 export const metadata: Metadata = {
     title: `Speil ${erLokal ? ' - localhost' : ''}`,
@@ -16,8 +17,10 @@ export default async function RootLayout({ children }: Readonly<PropsWithChildre
     return (
         <html lang="en">
             <body>
-                <Header />
-                {children}
+                <Providers>
+                    <Header />
+                    {children}
+                </Providers>
             </body>
         </html>
     )
