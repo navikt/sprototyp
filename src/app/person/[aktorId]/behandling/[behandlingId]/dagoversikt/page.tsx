@@ -1,9 +1,14 @@
 'use client'
 
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
 import { Utbetalingstabell } from '@components/dagoversikt/Utbetalingstabell'
+import { useBehandling } from '@hooks/queries/useBehandling'
 
 export default function Page(): ReactElement {
-    return <Utbetalingstabell fom="2025-01-01" tom="2025-01-25" />
+    const { data: behandling } = useBehandling()
+    if (!behandling) {
+        return <div />
+    }
+    return <Utbetalingstabell fom={behandling.fom} tom={behandling.tom} />
 }

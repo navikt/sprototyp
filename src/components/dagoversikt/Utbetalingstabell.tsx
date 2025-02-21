@@ -24,7 +24,7 @@ export const Utbetalingstabell = ({ fom, tom }: UtbetalingstabellProps): ReactEl
         const fromDate = dayjs(fom)
         const toDate = dayjs(tom)
         // loop gjennom alle dager fra fom til tom
-        for (let date = fromDate; date.isBefore(toDate); date = date.add(1, 'day')) {
+        for (let date = fromDate; date.isBefore(toDate.add(1, 'day')); date = date.add(1, 'day')) {
             const dato = date.format('YYYY-MM-DD')
             // sett inn dag i mappet
             dager.set(dato, {
