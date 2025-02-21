@@ -26,6 +26,10 @@ export default function Page(): ReactElement {
                     <Modal.Body>
                         <Select label="Velg behandling" className="mb-8">
                             <option value="ss">Søknad om sykepenger</option>
+                            <option value="serwws">Reisetilskudd</option>
+                            <option value="ssweq2314">Behandlingsdager</option>
+                            <option value="s123123s">Refusjon av arbeidsgiverperioden - kronisk syk</option>
+                            <option value="s12312s">Refusjon av arbeidsgiverperioden - gravid</option>
                         </Select>
                         <BodyLong spacing>
                             Culpa aliquip ut cupidatat laborum minim quis ex in aliqua. Qui incididunt dolor do ad ut.
