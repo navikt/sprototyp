@@ -10,6 +10,7 @@ const SaksbildeMenuContainer = (): ReactElement => {
         <SaksbildeMenuWrapper>
             <HStack>
                 <HStack as="nav" role="tablist">
+                    <NavLenke to="inntekter" tittel="Inntekter" />
                     <NavLenke to="vilkarsvurdering" tittel="Vilkårsvurdering" />
                     <NavLenke to="dagoversikt" tittel="Dagoversikt" />
                     <NavLenke to="inngangsvilkar" tittel="Inngangsvilkår" />
