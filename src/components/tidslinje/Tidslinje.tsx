@@ -10,7 +10,7 @@ export const Tidslinje = () => {
 
     return (
         <div className="w-100">
-            <Timeline className="pt-8 pb-16">
+            <Timeline className="pt-8 pb-16 px-8" direction="left">
                 <Timeline.Row label="Manuell behandling" icon={<PersonIcon aria-hidden />}>
                     {behandlinger.map((p, i) => (
                         <Timeline.Period
