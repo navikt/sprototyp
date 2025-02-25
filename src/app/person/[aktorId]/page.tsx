@@ -1,7 +1,17 @@
 'use client'
 
 import { ReactElement, useRef } from 'react'
-import { BodyLong, Button, DatePicker, HStack, Modal, Select, Table, useRangeDatepicker } from '@navikt/ds-react'
+import {
+    BodyLong,
+    Button,
+    DatePicker,
+    Heading,
+    HStack,
+    Modal,
+    Select,
+    Table,
+    useRangeDatepicker,
+} from '@navikt/ds-react'
 import { usePathname, useRouter } from 'next/navigation'
 import { TableDataCell, TableHeaderCell } from '@navikt/ds-react/Table'
 
@@ -20,35 +30,40 @@ export default function Page(): ReactElement {
     const harBehandlinger = behandlinger && behandlinger?.length > 0
     return (
         <div className="p-16">
-            <Button variant="secondary-neutral" onClick={() => ref.current?.showModal()}>
+            <Button className="mb-8" variant="secondary-neutral" onClick={() => ref.current?.showModal()}>
                 Start ny behandling
             </Button>
 
             {harBehandlinger && (
-                <Table size="small">
-                    <Table.Header>
-                        <Table.Row>
-                            <TableHeaderCell>fom</TableHeaderCell>
-                            <TableHeaderCell>tom</TableHeaderCell>
-                            <TableHeaderCell>status</TableHeaderCell>
-                        </Table.Row>
-                    </Table.Header>
-                    <Table.Body>
-                        {behandlinger?.map((behandling) => (
-                            <Table.Row
-                                className="cursor-pointer hover:bg-navds-grey-10"
-                                key={behandling.id}
-                                onClick={() =>
-                                    router.push(pathname + '/behandling/' + behandling.id + '/vilkarsvurdering')
-                                }
-                            >
-                                <TableDataCell>{behandling.fom}</TableDataCell>
-                                <TableDataCell>{behandling.tom}</TableDataCell>
-                                <TableDataCell></TableDataCell>
+                <>
+                    <Heading spacing size="small">
+                        Manuelle behandlinger
+                    </Heading>
+                    <Table size="small">
+                        <Table.Header>
+                            <Table.Row>
+                                <TableHeaderCell>Fra</TableHeaderCell>
+                                <TableHeaderCell>Til</TableHeaderCell>
+                                <TableHeaderCell>Status</TableHeaderCell>
                             </Table.Row>
-                        ))}
-                    </Table.Body>
-                </Table>
+                        </Table.Header>
+                        <Table.Body>
+                            {behandlinger?.map((behandling) => (
+                                <Table.Row
+                                    className="cursor-pointer hover:bg-navds-grey-10"
+                                    key={behandling.id}
+                                    onClick={() =>
+                                        router.push(pathname + '/behandling/' + behandling.id + '/vilkarsvurdering')
+                                    }
+                                >
+                                    <TableDataCell>{behandling.fom}</TableDataCell>
+                                    <TableDataCell>{behandling.tom}</TableDataCell>
+                                    <TableDataCell>✍️</TableDataCell>
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table>
+                </>
             )}
 
             <div className="py-16">
