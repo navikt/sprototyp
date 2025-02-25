@@ -1,7 +1,11 @@
-import { ReactElement } from 'react'
+import React, { ReactElement } from 'react'
 
-import { Redirect } from '@/components/Redirect'
+import { Testpersontabell } from '@components/testpersoner/Testpersontabell'
 
 export default async function Page(): Promise<ReactElement> {
-    return <Redirect />
+    return (
+        <div className="p-8">
+            <Testpersontabell />
+        </div>
+    )
 }
