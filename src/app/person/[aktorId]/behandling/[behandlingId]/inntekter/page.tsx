@@ -3,34 +3,36 @@
 import { useState, FormEvent, ReactElement } from 'react'
 import { Button } from '@navikt/ds-react'
 
-interface Arbeidsforhold {
-    id: number
-    type: 'arbeidstaker' | 'næringsdrivende' | 'frilanser'
-    orgnummer: string
-}
+import { useInntekter } from '@hooks/queries/useInntekter'
+import { useNyInntekt } from '@hooks/mutations/useNyInntekt'
 
 export default function Page(): ReactElement {
     const [arbeidssituasjon, setArbeidssituasjon] = useState<'arbeidstaker' | 'næringsdrivende' | 'frilanser'>(
         'arbeidstaker',
     )
     const [orgnummer, setOrgnummer] = useState<string>('')
-    const [arbeidsforhold, setArbeidsforhold] = useState<Arbeidsforhold[]>([])
+
+    const { data: inntekter } = useInntekter()
+    const { mutate: nyInntekt } = useNyInntekt()
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const nyttArbeidsforhold: Arbeidsforhold = {
-            id: Date.now(),
-            type: arbeidssituasjon,
-            orgnummer: arbeidssituasjon === 'arbeidstaker' ? orgnummer : '',
-        }
+        nyInntekt({
+            callback: (behandlingId) => {
+                // eslint-disable-next-line no-console
+                console.log('Inntekt lagt til', behandlingId)
+            },
+            request: {
+                inntekt: {
+                    sykmeldt: false,
+                    inntektstype: arbeidssituasjon,
+                    orgnummer: orgnummer,
+                },
+            },
+        })
 
-        setArbeidsforhold([...arbeidsforhold, nyttArbeidsforhold])
         setArbeidssituasjon('arbeidstaker')
         setOrgnummer('')
-    }
-
-    const handleRemove = (id: number) => {
-        setArbeidsforhold(arbeidsforhold.filter((item) => item.id !== id))
     }
 
     return (
@@ -77,13 +79,13 @@ export default function Page(): ReactElement {
                     </tr>
                 </thead>
                 <tbody>
-                    {arbeidsforhold.map((item) => (
+                    {inntekter?.map((item) => (
                         <tr key={item.id}>
-                            <td className="py-2 border text-center">{item.type}</td>
+                            <td className="py-2 border text-center">{item.inntektstype}</td>
                             <td className="py-2 border text-center">{item.orgnummer}</td>
                             <td className="py-2 border text-center">
                                 <button
-                                    onClick={() => handleRemove(item.id)}
+                                    onClick={() => window.alert('todo')}
                                     className="bg-red-500 text-white px-2 py-1 rounded"
                                 >
                                     Fjern

@@ -5,9 +5,12 @@ export interface Behandling {
     aktorid: string
 }
 
-export interface Inntekt {
+export interface Inntekt extends NyInntekt {
     id: string
     behandlingId: string
+}
+
+export interface NyInntekt {
     sykmeldt: boolean
     inntektstype: string
     orgnummer?: string
