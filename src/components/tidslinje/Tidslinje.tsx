@@ -6,6 +6,7 @@ import { useBehandlinger } from '@hooks/queries/useBehandlinger'
 export const Tidslinje = () => {
     const { data: behandlinger } = useBehandlinger()
     if (!behandlinger) return null
+    if (behandlinger.length == 0) return null
 
     return (
         <div className="w-100">
