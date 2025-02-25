@@ -10,5 +10,9 @@ export async function GET(
 ) {
     const slug = await params
 
-    return Response.json(hentBehandling(slug.behandlingId))
+    const data = hentBehandling(slug.behandlingId)
+    if (!data) {
+        return Response.json({ code: 'not_found' }, { status: 404 })
+    }
+    return Response.json(data)
 }
