@@ -6,13 +6,11 @@ import { GenderIcon } from '@/components/personheader/GenderIcon'
 import { Fødselsnummer } from '@/components/personheader/Fødselsnummer'
 import { AktørId } from '@/components/personheader/AktørId'
 
-import styles from './PersonHeader.module.css'
-
 export const PersonHeaderWithContent = ({ person }: { person: Person }): ReactElement => {
     const params = useParams()
     const router = useRouter()
     return (
-        <div className={styles.PersonHeader}>
+        <div className="flex border-b items-center h-12 box-border px-8 whitespace-nowrap min-w-max">
             <GenderIcon />
             <BodyShort
                 weight="semibold"
@@ -24,11 +22,11 @@ export const PersonHeaderWithContent = ({ person }: { person: Person }): ReactEl
                 }}
                 className="cursor-hand  hover:underline"
             >{`${person.navn} (${person.alder} år)`}</BodyShort>
-            <BodyShort className={styles.Separator}>/</BodyShort>
+            <BodyShort className="mx-4">/</BodyShort>
             <Fødselsnummer fødselsnummer={person.fodselsnummer} />
-            <BodyShort className={styles.Separator}>/</BodyShort>
+            <BodyShort className="mx-4">/</BodyShort>
             <AktørId aktørId={person.aktorId} />
-            <BodyShort className={styles.Separator}>/</BodyShort>
+            <BodyShort className="mx-4">/</BodyShort>
             <BodyShort>
                 Boenhet: {person.bohenetId} ({person.boenhetNavn})
             </BodyShort>

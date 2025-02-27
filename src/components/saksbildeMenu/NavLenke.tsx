@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { ReactElement } from 'react'
 import { last } from 'remeda'
-import { Box, Skeleton } from '@navikt/ds-react'
 
 import styles from './NavLenke.module.css'
 
@@ -24,9 +23,3 @@ export const NavLenke = ({ tittel, to }: NavLenkeProps): ReactElement => {
         </Link>
     )
 }
-
-export const NavLenkeSkeleton = ({ tittel }: { tittel: string }) => (
-    <Skeleton>
-        <Box style={{ height: '46px' }}>{tittel}</Box>
-    </Skeleton>
-)
