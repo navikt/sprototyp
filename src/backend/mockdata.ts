@@ -10,6 +10,10 @@ export const inntektstore = nextleton('inntekter', () => {
     return {} as Record<string, Inntekt>
 })
 
+export const soknader = nextleton('soknader', () => {
+    return {} as Record<string, Inntekt>
+})
+
 export function hentBehandling(behandlingid: string) {
     if (!behandlingstore[behandlingid]) {
         return null

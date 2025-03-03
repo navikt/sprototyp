@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react'
 import { Table } from '@navikt/ds-react'
 import { useRouter } from 'next/navigation'
 
-import { testpersoner } from '@components/testpersoner/testpersoner'
+import { personer } from '@/backend/personer'
 
 export function Testpersontabell(): ReactElement {
     const router = useRouter()
@@ -13,7 +13,7 @@ export function Testpersontabell(): ReactElement {
         <>
             <Table size="small" className="w-2/3">
                 <Table.Body>
-                    {testpersoner.map((person) => (
+                    {personer.map((person) => (
                         <Table.Row
                             key={person.fodselsnummer}
                             className="hover:cursor-pointer"

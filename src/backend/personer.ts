@@ -1,4 +1,6 @@
-export const testpersoner = [
+import { RSSoknad } from '@typer/soknad'
+
+export const personer: Person[] = [
     {
         fodselsnummer: '12345678901',
         aktorId: '1234567890123',
@@ -80,3 +82,17 @@ export const testpersoner = [
         boenhetNavn: 'Skien kommune',
     },
 ]
+
+export function hentPerson(aktorid: string): Person | undefined {
+    return personer.find((person) => person.aktorId === aktorid)
+}
+
+interface Person {
+    fodselsnummer: string
+    aktorId: string
+    navn: string
+    alder: number
+    bohenetId: string
+    boenhetNavn: string
+    soknader?: RSSoknad[]
+}

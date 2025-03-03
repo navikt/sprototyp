@@ -2,13 +2,13 @@
 
 import React, { PropsWithChildren, ReactElement } from 'react'
 import { useParams } from 'next/navigation'
+import { testpersoner } from '@components/testpersoner/testpersoner'
 
 import { PersonHeaderWithContent } from '@/components/personheader/Personheader'
 import { Saksbilde } from '@/components/saksbilde/Saksbilde'
 import { Venstremeny } from '@/components/venstremeny/Venstremeny'
 import { Historikk } from '@/components/historikk/Historikk'
 import { Tidslinje } from '@components/tidslinje/Tidslinje'
-import { testpersoner } from '@components/testpersoner/testpersoner'
 
 import styles from './layout.module.css'
 
