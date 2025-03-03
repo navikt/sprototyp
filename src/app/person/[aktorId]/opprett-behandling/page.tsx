@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import {
     BodyShort,
     Button,
@@ -18,16 +18,21 @@ import { useNyBehandling } from '@hooks/mutations/useNyBehandling'
 import { useSoknader } from '@hooks/queries/useSoknader'
 
 export default function Page(): ReactElement {
-    const { datepickerProps, toInputProps, fromInputProps, selectedRange } = useRangeDatepicker({
+    const {
+        datepickerProps,
+        toInputProps,
+        fromInputProps,
+        selectedRange,
+        setSelected: setSelectedBehandlingRange,
+    } = useRangeDatepicker({
         defaultSelected: { from: undefined, to: undefined },
     })
     const {
         datepickerProps: datepickerPropsSkjaring,
         inputProps,
         selectedDay,
-    } = useDatepicker({
-        fromDate: new Date('Aug 23 2019'),
-    })
+        setSelected: setSkjaring,
+    } = useDatepicker({})
     const mutation = useNyBehandling()
     const soknader = useSoknader()
     const router = useRouter()
@@ -38,6 +43,42 @@ export default function Page(): ReactElement {
     const toggleSelectedSoknad = (value: string) => {
         setSelectedSoknader((list) => (list.includes(value) ? list.filter((id) => id !== value) : [...list, value]))
     }
+
+    useEffect(() => {
+        if (selectedSoknader.length === 0) {
+            setSelectedBehandlingRange({ from: undefined, to: undefined })
+            return
+        }
+        const selectedSoknaderData = soknader.data?.filter((soknad) => selectedSoknader.includes(soknad.id)) || []
+        const fom = selectedSoknaderData.map((soknad) => soknad.fom).sort()[0]
+        const tom = selectedSoknaderData.map((soknad) => soknad.tom).sort()[selectedSoknaderData.length - 1]
+        setSelectedBehandlingRange({ from: new Date(fom!), to: new Date(tom!) })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedSoknader, soknader.data])
+
+    useEffect(() => {
+        if (selectedSoknader.length === 0) {
+            setSkjaring(undefined)
+            return
+        }
+        const selectedSoknaderData = soknader.data?.filter((soknad) => selectedSoknader.includes(soknad.id)) || []
+
+        const relevanteDatoer = [] as string[]
+        selectedSoknaderData.forEach((soknad) => {
+            if (soknad.fom) {
+                relevanteDatoer.push(soknad.fom)
+            }
+            if (soknad.startSykeforlop) {
+                relevanteDatoer.push(soknad.startSykeforlop)
+            }
+        })
+        if (relevanteDatoer.length > 0) {
+            const skjaring = relevanteDatoer.sort()[relevanteDatoer.length - 1]
+            setSkjaring(new Date(skjaring))
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedSoknader, soknader.data])
 
     return (
         <div className="p-4">
