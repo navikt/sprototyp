@@ -31,8 +31,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ akt
                 sykmeldt: true,
                 behandlingId: behandling.id,
                 inntektstype: soknad.arbeidssituasjon,
-                orgnavn: req.orgnavn,
-                orgnummer: req.orgnummer,
+                orgnavn: soknad.arbeidsgiver?.navn,
+                orgnummer: soknad.arbeidsgiver?.orgnummer,
             }
             lagreInntekt(inntekt)
         }
