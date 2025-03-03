@@ -26,7 +26,7 @@ export const Sykepengegrunnlag = () => {
                         <HeaderCellText text="Sykepengegrunnlag" />
                     </Table.Row>
                 </Table.Header>
-                <Table.Body className="">
+                <Table.Body className={styles.InntektsgrunnlagTableBody}>
                     {inntekter?.map((inntekt) => (
                         <Table.Row key={inntekt.id}>
                             <Table.DataCell>{inntekt.orgnavn || inntekt.inntektstype}</Table.DataCell>
@@ -38,13 +38,9 @@ export const Sykepengegrunnlag = () => {
                         <Table.DataCell>
                             <BodyShort weight="semibold">Total</BodyShort>
                         </Table.DataCell>
-                        <TableCell content={<BodyShort weight="semibold">Omregnet årsinntekt?</BodyShort>} />
-                        <TableCell
-                            content={<BodyShort weight="semibold">somPenger(sammenligningsgrunnlag)</BodyShort>}
-                        />
-                        <TableCell
-                            content={<BodyShort weight="semibold">somPenger(skjønnsmessigFastsattÅrlig)</BodyShort>}
-                        />
+                        <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
+                        <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
+                        <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
                     </Table.Row>
                 </tfoot>
             </Table>
