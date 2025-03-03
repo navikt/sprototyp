@@ -1,7 +1,8 @@
 import { v4 } from 'uuid'
 
-import { hentPaaAktorid, lagreBehandling } from '@/backend/mockdata'
+import { hentPaaAktorid, lagreBehandling, lagreInntekt } from '@/backend/mockdata'
 import { Behandling } from '@typer/manuellbehandlingtypes'
+import { hentPerson } from '@/backend/personer'
 
 export async function POST(request: Request, { params }: { params: Promise<{ aktorid: string }> }) {
     const req = await request.json()
@@ -16,6 +17,27 @@ export async function POST(request: Request, { params }: { params: Promise<{ akt
         soknadIder: req.soknadIder,
     }
     lagreBehandling(behandling)
+    const seenInntekt = new Set()
+    req.soknadIder.forEach((soknadId: string) => {
+        const soknad = hentPerson(slug.aktorid)?.soknader?.find((soknad) => soknad.id === soknadId)
+
+        if (soknad) {
+            const inntektKey = `${soknad.arbeidsgiver?.orgnummer}-${soknad.arbeidssituasjon}`
+            if (seenInntekt.has(inntektKey)) {
+                return
+            }
+            const inntekt = {
+                id: v4(),
+                sykmeldt: true,
+                behandlingId: behandling.id,
+                inntektstype: soknad.arbeidssituasjon,
+                orgnavn: req.orgnavn,
+                orgnummer: req.orgnummer,
+            }
+            lagreInntekt(inntekt)
+        }
+    })
+
     return Response.json(behandling)
 }
 

@@ -14,7 +14,7 @@ export async function POST(
     const req = await request.json()
     const slug = await params
 
-    const behandling: Inntekt = {
+    const inntekt: Inntekt = {
         id: v4(),
         sykmeldt: req.sykmeldt,
         behandlingId: slug.behandlingId,
@@ -22,8 +22,8 @@ export async function POST(
         orgnavn: req.orgnavn,
         orgnummer: req.orgnummer,
     }
-    lagreInntekt(behandling)
-    return Response.json(behandling)
+    lagreInntekt(inntekt)
+    return Response.json(inntekt)
 }
 
 export async function GET(

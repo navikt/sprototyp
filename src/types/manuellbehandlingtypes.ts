@@ -1,3 +1,5 @@
+import { RSArbeidssituasjonType } from '@typer/soknad'
+
 export interface Behandling {
     id: string
     fom: string
@@ -14,7 +16,7 @@ export interface Inntekt extends NyInntekt {
 
 export interface NyInntekt {
     sykmeldt: boolean
-    inntektstype: string
+    inntektstype: RSArbeidssituasjonType | null
     orgnummer?: string
     orgnavn?: string
 }

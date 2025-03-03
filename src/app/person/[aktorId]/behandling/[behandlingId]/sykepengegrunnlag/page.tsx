@@ -1,12 +1,9 @@
 'use client'
 
-import { ReactElement } from 'react'
-import { usePathname } from 'next/navigation'
-import { Heading } from '@navikt/ds-react'
+import React, { ReactElement } from 'react'
+
+import { Sykepengegrunnlag } from '@components/sykepengegrunnlag/Sykepengegrunnlag'
 
 export default function Page(): ReactElement {
-    const pathname = usePathname()
-
-    const lastPath = pathname.split('/').pop()
-    return <Heading size="medium">{lastPath}</Heading>
+    return <Sykepengegrunnlag />
 }

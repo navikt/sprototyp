@@ -8,7 +8,7 @@ export default function Layout({ children }: PropsWithChildren): ReactElement {
     return (
         <div className="h-full">
             <SaksbildeMenu disabled={false} />
-            {children}
+            <div className="p-4">{children}</div>
         </div>
     )
 }
