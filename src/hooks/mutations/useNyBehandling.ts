@@ -8,6 +8,7 @@ interface MutationProps {
         fom: string
         tom: string
         skjaring: string
+        soknadIder: string[]
     }
     callback: (behandling: Behandling) => void
 }

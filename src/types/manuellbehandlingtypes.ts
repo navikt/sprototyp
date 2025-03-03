@@ -3,6 +3,8 @@ export interface Behandling {
     fom: string
     tom: string
     aktorid: string
+    skjaring: string
+    soknadIder: string[]
 }
 
 export interface Inntekt extends NyInntekt {

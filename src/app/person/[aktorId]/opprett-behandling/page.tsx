@@ -164,7 +164,7 @@ export default function Page(): ReactElement {
                                 router.push(
                                     `/person/${params.aktorId}/behandling/${behandlingId.id}/sykepengegrunnlag`,
                                 ),
-                            request: { fom, tom, skjaring },
+                            request: { fom, tom, skjaring, soknadIder: selectedSoknader },
                         })
                     }}
                 >
