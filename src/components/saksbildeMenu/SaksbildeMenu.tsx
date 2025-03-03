@@ -1,20 +1,16 @@
 import React, { ReactElement } from 'react'
-import { BodyShort, Box, BoxProps, HStack } from '@navikt/ds-react'
-
-import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { Box, BoxProps, HStack } from '@navikt/ds-react'
 
 import { NavLenke } from './NavLenke'
 
-const SaksbildeMenuContainer = (): ReactElement => {
+export const SaksbildeMenu = ({ disabled }: { disabled: boolean }): ReactElement => {
     return (
         <SaksbildeMenuWrapper>
             <HStack>
                 <HStack as="nav" role="tablist">
-                    <NavLenke to="inntekter" tittel="Inntekter" />
-                    <NavLenke to="vilkarsvurdering" tittel="Vilkårsvurdering" />
-                    <NavLenke to="dagoversikt" tittel="Dagoversikt" />
-                    <NavLenke to="inngangsvilkar" tittel="Inngangsvilkår" />
-                    <NavLenke to="sykepengegrunnlag" tittel="Sykepengegrunnlag" />
+                    <NavLenke to="sykepengegrunnlag" tittel="Sykepengegrunnlag" disabled={disabled} />
+                    <NavLenke to="vilkarsvurdering" tittel="Vilkårsvurdering" disabled={disabled} />
+                    <NavLenke to="dagoversikt" tittel="Dagoversikt" disabled={disabled} />
                 </HStack>
             </HStack>
         </SaksbildeMenuWrapper>
@@ -30,18 +26,4 @@ const SaksbildeMenuWrapper = (props: BoxProps) => (
         overflow="hidden"
         {...props}
     />
-)
-
-const SaksbildeMenuError = (): ReactElement => (
-    <SaksbildeMenuWrapper background="surface-danger-subtle">
-        <HStack height="100%" align="center">
-            <BodyShort>Det oppstod en feil. Kan ikke vise saksbildemeny.</BodyShort>
-        </HStack>
-    </SaksbildeMenuWrapper>
-)
-
-export const SaksbildeMenu = (): ReactElement => (
-    <ErrorBoundary fallback={<SaksbildeMenuError />}>
-        <SaksbildeMenuContainer />
-    </ErrorBoundary>
 )

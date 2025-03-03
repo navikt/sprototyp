@@ -7,6 +7,7 @@ interface MutationProps {
     request: {
         fom: string
         tom: string
+        skjaring: string
     }
     callback: (behandling: Behandling) => void
 }

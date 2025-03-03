@@ -7,7 +7,7 @@ import { SaksbildeMenu } from '@/components/saksbildeMenu/SaksbildeMenu'
 export default function Layout({ children }: PropsWithChildren): ReactElement {
     return (
         <div className="h-full">
-            <SaksbildeMenu />
+            <SaksbildeMenu disabled={false} />
             {children}
         </div>
     )

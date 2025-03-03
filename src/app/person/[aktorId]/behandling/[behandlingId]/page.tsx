@@ -8,7 +8,7 @@ export default function Page(): ReactElement {
     const pathname = usePathname()
 
     useEffect(() => {
-        router.push(pathname + '/vilkarsvurdering')
+        router.replace('/')
     }, [pathname, router])
     return <div></div>
 }

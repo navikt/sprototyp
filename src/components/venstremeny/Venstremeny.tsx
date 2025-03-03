@@ -30,7 +30,7 @@ export const VenstremenyBehandling = (): ReactElement => {
 
 export const Venstremeny = (): ReactElement => {
     const pathname = usePathname()
-    if (pathname.includes('behandling')) {
+    if (pathname.includes('behandling') && !pathname.includes('opprett')) {
         return <VenstremenyBehandling />
     }
     return <section className={styles.Venstremeny}></section>
