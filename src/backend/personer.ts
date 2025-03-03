@@ -1,3 +1,5 @@
+import { v4 } from 'uuid'
+
 import { RSSoknad } from '@typer/soknad'
 
 export const personer: Person[] = [
@@ -8,6 +10,10 @@ export const personer: Person[] = [
         alder: 42,
         bohenetId: '123456789',
         boenhetNavn: 'Oslo kommune',
+        soknader: [
+            skapSoknad({ fom: '2025-01-01', tom: '2025-01-20' }),
+            skapSoknad({ fom: '2025-01-21', tom: '2025-02-18' }),
+        ],
     },
     {
         fodselsnummer: '22345678902',
@@ -95,4 +101,35 @@ interface Person {
     bohenetId: string
     boenhetNavn: string
     soknader?: RSSoknad[]
+}
+
+function skapSoknad(opts: { fom: string; tom: string; id?: string }): RSSoknad {
+    return {
+        id: opts.id || v4(),
+        fom: opts.fom,
+        tom: opts.tom,
+        soknadstype: 'ARBEIDSTAKERE',
+        status: 'NY',
+        arbeidssituasjon: 'ARBEIDSTAKER',
+        korrigerer: null,
+        korrigertAv: null,
+        avbruttDato: null,
+        sykmeldingUtskrevet: null,
+        startSykeforlop: null,
+        opprettetDato: new Date().toISOString(),
+        sendtTilNAVDato: null,
+        sendtTilArbeidsgiverDato: null,
+        arbeidsgiver: {
+            navn: 'Matbutikken AS',
+            orgnummer: '987848484',
+        },
+        soknadPerioder: [
+            {
+                fom: opts.fom,
+                tom: opts.tom,
+                grad: 100,
+                sykmeldingstype: 'AKTIVITET_IKKE_MULIG',
+            },
+        ],
+    }
 }

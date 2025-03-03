@@ -1,6 +1,5 @@
 export interface RSSoknad {
     id: string
-    sykmeldingId: string | null
     soknadstype: RSSoknadstypeType
     status: RSSoknadstatusType
     arbeidssituasjon: RSArbeidssituasjonType | null
