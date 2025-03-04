@@ -1,5 +1,5 @@
-import { BodyShort, Detail, Table, TextField } from '@navikt/ds-react'
-import React from 'react'
+import { BodyShort, Detail, Radio, RadioGroup, Table, TextField } from '@navikt/ds-react'
+import React, { useState } from 'react'
 
 import { useInntekter } from '@hooks/queries/useInntekter'
 import { TableCell } from '@components/sykepengegrunnlag/TableCell'
@@ -8,51 +8,60 @@ import styles from './SykepengegrunnlagPanel.module.css'
 
 export const Sykepengegrunnlag = () => {
     const { data: inntekter } = useInntekter()
+    const [val, setVal] = useState('fastsett')
 
     return (
         <div>
-            <Table className={styles.Table}>
-                <Table.Header>
-                    <Table.Row>
-                        <HeaderCellBold />
-                        <HeaderCellBold text="Inntektsgrunnlag" />
-                        <HeaderCellBold text="Sammenligningsgr." />
-                        <HeaderCellBold text="Skjønnsfastsatt" />
-                    </Table.Row>
-                    <Table.Row>
-                        <HeaderCellText text="Inntektskilde" />
-                        <HeaderCellText text="Omregnet årsinntekt" />
-                        <HeaderCellText text="Rapportert årsinntekt" />
-                        <HeaderCellText text="Sykepengegrunnlag" />
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body className={styles.InntektsgrunnlagTableBody}>
-                    {inntekter?.map((inntekt) => (
-                        <Table.Row key={inntekt.id}>
-                            <Table.DataCell>{inntekt.orgnavn || inntekt.inntektstype}</Table.DataCell>
-                            <Table.DataCell>
-                                <TextField size="small" label=""></TextField>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                <TextField size="small" label=""></TextField>
-                            </Table.DataCell>
-                            <Table.DataCell>
-                                <TextField size="small" label=""></TextField>
-                            </Table.DataCell>
+            <RadioGroup legend="Hent sykepengegrunnlag" onChange={setVal} value={val} className="mb-8">
+                <Radio value="fastsett">Fastsett sykepengegrunnlag manuelt</Radio>
+                <Radio value="speil">Speil, tidligere vedtak</Radio>
+                <Radio value="info">Infotrygd, tidligere vedtak</Radio>
+            </RadioGroup>
+
+            {val == 'fastsett' && (
+                <Table className={styles.Table}>
+                    <Table.Header>
+                        <Table.Row>
+                            <HeaderCellBold />
+                            <HeaderCellBold text="Inntektsgrunnlag" />
+                            <HeaderCellBold text="Sammenligningsgr." />
+                            <HeaderCellBold text="Skjønnsfastsatt" />
                         </Table.Row>
-                    ))}
-                </Table.Body>
-                <tfoot>
-                    <Table.Row>
-                        <Table.DataCell>
-                            <BodyShort weight="semibold">Total</BodyShort>
-                        </Table.DataCell>
-                        <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
-                        <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
-                        <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
-                    </Table.Row>
-                </tfoot>
-            </Table>
+                        <Table.Row>
+                            <HeaderCellText text="Inntektskilde" />
+                            <HeaderCellText text="Omregnet årsinntekt" />
+                            <HeaderCellText text="Rapportert årsinntekt" />
+                            <HeaderCellText text="Sykepengegrunnlag" />
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body className={styles.InntektsgrunnlagTableBody}>
+                        {inntekter?.map((inntekt) => (
+                            <Table.Row key={inntekt.id}>
+                                <Table.DataCell>{inntekt.orgnavn || inntekt.inntektstype}</Table.DataCell>
+                                <Table.DataCell>
+                                    <TextField size="small" label=""></TextField>
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    <TextField size="small" label=""></TextField>
+                                </Table.DataCell>
+                                <Table.DataCell>
+                                    <TextField size="small" label=""></TextField>
+                                </Table.DataCell>
+                            </Table.Row>
+                        ))}
+                    </Table.Body>
+                    <tfoot>
+                        <Table.Row>
+                            <Table.DataCell>
+                                <BodyShort weight="semibold">Total</BodyShort>
+                            </Table.DataCell>
+                            <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
+                            <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
+                            <TableCell content={<BodyShort weight="semibold">-</BodyShort>} />
+                        </Table.Row>
+                    </tfoot>
+                </Table>
+            )}
         </div>
     )
 }

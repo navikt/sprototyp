@@ -2,11 +2,11 @@ import { Arbeidsgiver, RSArbeidssituasjonType, RSSoknad } from '@typer/soknad'
 
 export const personer: Person[] = [
     {
-        fodselsnummer: '12345678901',
-        aktorId: '1234567890123',
+        fodselsnummer: '23826700000',
+        aktorId: '992232890123',
         navn: 'Ola Nordmann',
         alder: 42,
-        bohenetId: '123456789',
+        bohenetId: '3453',
         boenhetNavn: 'Oslo kommune',
         beskrivelse: 'To etterfølgende søknader fra en arbeidsgiver',
         soknader: [
@@ -14,14 +14,14 @@ export const personer: Person[] = [
                 fom: '2025-01-01',
                 tom: '2025-01-20',
                 id: '1234werw56',
-                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '999333654' },
                 arbeidssituasjon: 'ARBEIDSTAKER',
             }),
             skapSoknad({
                 fom: '2025-01-21',
                 tom: '2025-02-18',
                 id: '12werwwerwere3456',
-                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '999333654' },
                 arbeidssituasjon: 'ARBEIDSTAKER',
             }),
         ],
@@ -40,14 +40,14 @@ export const personer: Person[] = [
                 tom: '2025-01-20',
                 id: '123456',
 
-                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '999333654' },
                 arbeidssituasjon: 'ARBEIDSTAKER',
             }),
             skapSoknad({
                 fom: '2025-01-21',
                 tom: '2025-02-18',
                 id: '12werwe3rewrw456',
-                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '999333654' },
                 arbeidssituasjon: 'ARBEIDSTAKER',
             }),
             skapSoknad({
@@ -73,7 +73,7 @@ export const personer: Person[] = [
                 fom: '2025-01-21',
                 tom: '2025-02-18',
                 id: '12werwe34erter56',
-                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '999333654' },
                 arbeidssituasjon: 'ARBEIDSTAKER',
             }),
             skapSoknad({
