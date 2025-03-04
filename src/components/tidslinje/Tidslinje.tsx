@@ -1,5 +1,6 @@
 import { PencilIcon, PersonIcon } from '@navikt/aksel-icons'
 import { Timeline } from '@navikt/ds-react'
+import dayjs from 'dayjs'
 
 import { useBehandlinger } from '@hooks/queries/useBehandlinger'
 import { useSoknader } from '@hooks/queries/useSoknader'
@@ -22,9 +23,23 @@ export const Tidslinje = () => {
         return acc
     }, {})
 
+    const alleDatoer = [] as string[]
+    behandlinger.forEach((b) => {
+        alleDatoer.push(b.fom)
+        alleDatoer.push(b.tom)
+    })
+    soknader?.forEach((s) => {
+        alleDatoer.push(s.fom!)
+        alleDatoer.push(s.tom!)
+    })
+    const sortert = alleDatoer.sort()
+    // sorter alle datoer og hent første og siste, eventuelt hardkodet fra dagens dato 2 måneder tilbake
+    const forst = dayjs(sortert[0] || '2025-01-01').subtract(2, 'month')
+    const sist = dayjs(sortert[sortert.length - 1] || '2025-03-31').add(1, 'week')
+
     return (
         <div className="w-100">
-            <Timeline className="pt-8 pb-16 px-8" direction="right">
+            <Timeline className="pt-8 pb-16 px-8" direction="right" startDate={forst.toDate()} endDate={sist.toDate()}>
                 {behandlinger.length > 0 && (
                     <Timeline.Row label="Manuell behandling" icon={<PersonIcon aria-hidden />}>
                         {behandlinger.map((p, i) => (
@@ -35,7 +50,9 @@ export const Tidslinje = () => {
                                 status="info"
                                 icon={<PencilIcon aria-hidden />}
                                 statusLabel="Manuell behandliung"
-                            />
+                            >
+                                <span>sdfs</span>
+                            </Timeline.Period>
                         ))}
                     </Timeline.Row>
                 )}
@@ -52,11 +69,6 @@ export const Tidslinje = () => {
                         ))}
                     </Timeline.Row>
                 ))}
-                <Timeline.Zoom>
-                    <Timeline.Zoom.Button label="3 mnd" interval="month" count={3} />
-                    <Timeline.Zoom.Button label="6 mnd" interval="month" count={7} />
-                    <Timeline.Zoom.Button label="9 mnd" interval="month" count={9} />
-                </Timeline.Zoom>
             </Timeline>
         </div>
     )
