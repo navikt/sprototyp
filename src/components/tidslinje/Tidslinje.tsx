@@ -1,6 +1,7 @@
-import { PencilIcon, PersonIcon } from '@navikt/aksel-icons'
-import { Timeline } from '@navikt/ds-react'
+import { PencilIcon, PersonIcon, TasklistIcon } from '@navikt/aksel-icons'
+import { BodyShort, Timeline } from '@navikt/ds-react'
 import dayjs from 'dayjs'
+import React from 'react'
 
 import { useBehandlinger } from '@hooks/queries/useBehandlinger'
 import { useSoknader } from '@hooks/queries/useSoknader'
@@ -49,15 +50,16 @@ export const Tidslinje = () => {
                                 end={new Date(p.tom)}
                                 status="info"
                                 icon={<PencilIcon aria-hidden />}
-                                statusLabel="Manuell behandliung"
+                                statusLabel="Manuell behandling"
                             >
-                                <span>sdfs</span>
+                                <BodyShort>Manuell behandling</BodyShort>
+                                <BodyShort>{p.fom + ' ' + p.tom}</BodyShort>
                             </Timeline.Period>
                         ))}
                     </Timeline.Row>
                 )}
                 {Object.entries(soknaderGruppert || {}).map(([label, soknader]) => (
-                    <Timeline.Row key={label} label={label}>
+                    <Timeline.Row key={label} label={'Søknader ' + label} icon={<TasklistIcon aria-hidden />}>
                         {soknader.map((soknad, i) => (
                             <Timeline.Period
                                 key={i}
@@ -65,7 +67,11 @@ export const Tidslinje = () => {
                                 end={new Date(soknad.tom!)}
                                 status="success"
                                 statusLabel="Sendt"
-                            />
+                            >
+                                <BodyShort>{soknad.arbeidssituasjon}</BodyShort>
+                                <BodyShort>{soknad.arbeidsgiver?.navn}</BodyShort>
+                                <BodyShort>{soknad.fom + ' ' + soknad.tom}</BodyShort>
+                            </Timeline.Period>
                         ))}
                     </Timeline.Row>
                 ))}
