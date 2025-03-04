@@ -29,20 +29,23 @@ export function Testpersontabell(): ReactElement {
                 />
             </div>
 
-            <Table size="small" className="w-72 border-dashed border">
+            <Table size="small" className=" border-dashed border">
                 <Table.Body>
-                    {personer.map((person) => (
-                        <Table.Row
-                            key={person.fodselsnummer}
-                            className="hover:cursor-pointer hover:underline border-0 text-text-action"
-                            onClick={() => {
-                                setFnr(person.fodselsnummer)
-                            }}
-                        >
-                            <Table.DataCell className="border-0">{person.navn}</Table.DataCell>
-                            <Table.DataCell className="border-0">{person.fodselsnummer}</Table.DataCell>
-                        </Table.Row>
-                    ))}
+                    {personer.map((person) => {
+                        return (
+                            <Table.Row
+                                key={person.fodselsnummer}
+                                className="hover:cursor-pointer hover:underline border-0 text-text-action"
+                                onClick={() => {
+                                    setFnr(person.fodselsnummer)
+                                }}
+                            >
+                                <Table.DataCell className="border-0">{person.navn}</Table.DataCell>
+                                <Table.DataCell className="border-0">{person.fodselsnummer}</Table.DataCell>
+                                <Table.DataCell className="border-0">{person.beskrivelse}</Table.DataCell>
+                            </Table.Row>
+                        )
+                    })}
                 </Table.Body>
             </Table>
         </>

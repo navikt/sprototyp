@@ -1,6 +1,4 @@
-import { v4 } from 'uuid'
-
-import { RSSoknad } from '@typer/soknad'
+import { Arbeidsgiver, RSArbeidssituasjonType, RSSoknad } from '@typer/soknad'
 
 export const personer: Person[] = [
     {
@@ -10,9 +8,22 @@ export const personer: Person[] = [
         alder: 42,
         bohenetId: '123456789',
         boenhetNavn: 'Oslo kommune',
+        beskrivelse: 'To etterfølgende søknader fra en arbeidsgiver',
         soknader: [
-            skapSoknad({ fom: '2025-01-01', tom: '2025-01-20' }),
-            skapSoknad({ fom: '2025-01-21', tom: '2025-02-18' }),
+            skapSoknad({
+                fom: '2025-01-01',
+                tom: '2025-01-20',
+                id: '1234werw56',
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidssituasjon: 'ARBEIDSTAKER',
+            }),
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwwerwere3456',
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidssituasjon: 'ARBEIDSTAKER',
+            }),
         ],
     },
     {
@@ -22,6 +33,31 @@ export const personer: Person[] = [
         alder: 35,
         bohenetId: '223456789',
         boenhetNavn: 'Bergen kommune',
+        beskrivelse: 'To arbeidsgivere',
+        soknader: [
+            skapSoknad({
+                fom: '2025-01-01',
+                tom: '2025-01-20',
+                id: '123456',
+
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidssituasjon: 'ARBEIDSTAKER',
+            }),
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwe3rewrw456',
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidssituasjon: 'ARBEIDSTAKER',
+            }),
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwwwee3456',
+                arbeidsgiver: { navn: 'KIOSKEN', orgnummer: '23423234' },
+                arbeidssituasjon: 'ARBEIDSTAKER',
+            }),
+        ],
     },
     {
         fodselsnummer: '32345678903',
@@ -30,6 +66,23 @@ export const personer: Person[] = [
         alder: 29,
         bohenetId: '323456789',
         boenhetNavn: 'Trondheim kommune',
+        beskrivelse: 'Arbeidstaker og næringsdrivende',
+
+        soknader: [
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwe34erter56',
+                arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '123456789' },
+                arbeidssituasjon: 'ARBEIDSTAKER',
+            }),
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwe3456',
+                arbeidssituasjon: 'NAERINGSDRIVENDE',
+            }),
+        ],
     },
     {
         fodselsnummer: '42345678904',
@@ -38,6 +91,16 @@ export const personer: Person[] = [
         alder: 50,
         bohenetId: '423456789',
         boenhetNavn: 'Stavanger kommune',
+        beskrivelse: 'Næringsdrivende',
+
+        soknader: [
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwswewee3456',
+                arbeidssituasjon: 'NAERINGSDRIVENDE',
+            }),
+        ],
     },
     {
         fodselsnummer: '52345678905',
@@ -46,6 +109,15 @@ export const personer: Person[] = [
         alder: 27,
         bohenetId: '523456789',
         boenhetNavn: 'Kristiansand kommune',
+        beskrivelse: 'Annet arbeidsforhold',
+        soknader: [
+            skapSoknad({
+                fom: '2025-01-21',
+                tom: '2025-02-18',
+                id: '12werwswewee432234456',
+                arbeidssituasjon: 'ANNET',
+            }),
+        ],
     },
     {
         fodselsnummer: '62345678906',
@@ -105,16 +177,24 @@ interface Person {
     bohenetId: string
     boenhetNavn: string
     soknader?: RSSoknad[]
+    beskrivelse?: string
 }
 
-function skapSoknad(opts: { fom: string; tom: string; id?: string }): RSSoknad {
+function skapSoknad(opts: {
+    fom: string
+    tom: string
+    id: string
+    grad?: number
+    arbeidssituasjon: RSArbeidssituasjonType
+    arbeidsgiver?: Arbeidsgiver | null
+}): RSSoknad {
     return {
-        id: opts.id || v4(),
+        id: opts.id,
         fom: opts.fom,
         tom: opts.tom,
         soknadstype: 'ARBEIDSTAKERE',
-        status: 'NY',
-        arbeidssituasjon: 'ARBEIDSTAKER',
+        status: 'SENDT',
+        arbeidssituasjon: opts.arbeidssituasjon,
         korrigerer: null,
         korrigertAv: null,
         avbruttDato: null,
@@ -123,15 +203,12 @@ function skapSoknad(opts: { fom: string; tom: string; id?: string }): RSSoknad {
         opprettetDato: new Date().toISOString(),
         sendtTilNAVDato: null,
         sendtTilArbeidsgiverDato: null,
-        arbeidsgiver: {
-            navn: 'Matbutikken AS',
-            orgnummer: '987848484',
-        },
+        arbeidsgiver: opts.arbeidsgiver || null,
         soknadPerioder: [
             {
                 fom: opts.fom,
                 tom: opts.tom,
-                grad: 100,
+                grad: opts.grad || 100,
                 sykmeldingstype: 'AKTIVITET_IKKE_MULIG',
             },
         ],
