@@ -1,4 +1,4 @@
-import { BodyShort, Detail, Table } from '@navikt/ds-react'
+import { BodyShort, Detail, Table, TextField } from '@navikt/ds-react'
 import React from 'react'
 
 import { useInntekter } from '@hooks/queries/useInntekter'
@@ -30,6 +30,15 @@ export const Sykepengegrunnlag = () => {
                     {inntekter?.map((inntekt) => (
                         <Table.Row key={inntekt.id}>
                             <Table.DataCell>{inntekt.orgnavn || inntekt.inntektstype}</Table.DataCell>
+                            <Table.DataCell>
+                                <TextField size="small" label=""></TextField>
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <TextField size="small" label=""></TextField>
+                            </Table.DataCell>
+                            <Table.DataCell>
+                                <TextField size="small" label=""></TextField>
+                            </Table.DataCell>
                         </Table.Row>
                     ))}
                 </Table.Body>
