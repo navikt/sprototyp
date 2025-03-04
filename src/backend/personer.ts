@@ -93,6 +93,10 @@ export function hentPerson(aktorid: string): Person | undefined {
     return personer.find((person) => person.aktorId === aktorid)
 }
 
+export function hentPersonMedFnr(fnr: string): Person | undefined {
+    return personer.find((person) => person.fodselsnummer === fnr)
+}
+
 interface Person {
     fodselsnummer: string
     aktorId: string
