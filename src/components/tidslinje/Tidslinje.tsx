@@ -9,7 +9,7 @@ export const Tidslinje = () => {
     const { data: behandlinger } = useBehandlinger()
     const { data: soknader } = useSoknader()
     if (!behandlinger) return null
-    if (behandlinger.length == 0) return null
+    if (behandlinger.length == 0 && soknader?.length == 0) return null
 
     // grupper søknader på orgnummer sekundært arbeidssituasjon
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,18 +25,20 @@ export const Tidslinje = () => {
     return (
         <div className="w-100">
             <Timeline className="pt-8 pb-16 px-8" direction="right">
-                <Timeline.Row label="Manuell behandling" icon={<PersonIcon aria-hidden />}>
-                    {behandlinger.map((p, i) => (
-                        <Timeline.Period
-                            key={i}
-                            start={new Date(p.fom)}
-                            end={new Date(p.tom)}
-                            status="info"
-                            icon={<PencilIcon aria-hidden />}
-                            statusLabel="Manuell behandliung"
-                        />
-                    ))}
-                </Timeline.Row>
+                {behandlinger.length > 0 && (
+                    <Timeline.Row label="Manuell behandling" icon={<PersonIcon aria-hidden />}>
+                        {behandlinger.map((p, i) => (
+                            <Timeline.Period
+                                key={i}
+                                start={new Date(p.fom)}
+                                end={new Date(p.tom)}
+                                status="info"
+                                icon={<PencilIcon aria-hidden />}
+                                statusLabel="Manuell behandliung"
+                            />
+                        ))}
+                    </Timeline.Row>
+                )}
                 {Object.entries(soknaderGruppert || {}).map(([label, soknader]) => (
                     <Timeline.Row key={label} label={label}>
                         {soknader.map((soknad, i) => (
