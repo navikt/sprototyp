@@ -20,3 +20,10 @@ export interface NyInntekt {
     orgnummer?: string
     orgnavn?: string
 }
+
+export interface Dag {
+    id: string
+    inntektId: string
+    dagtype: string
+    dato: string
+}

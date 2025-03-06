@@ -1,6 +1,7 @@
 import { nextleton } from 'nextleton'
+import dayjs from 'dayjs'
 
-import { Behandling, Inntekt } from '@typer/manuellbehandlingtypes'
+import { Behandling, Dag, Inntekt } from '@typer/manuellbehandlingtypes'
 
 export const behandlingstore = nextleton('behandlinger', () => {
     return {} as Record<string, Behandling>
@@ -10,8 +11,8 @@ export const inntektstore = nextleton('inntekter', () => {
     return {} as Record<string, Inntekt>
 })
 
-export const soknader = nextleton('soknader', () => {
-    return {} as Record<string, Inntekt>
+export const dager = nextleton('dag', () => {
+    return {} as Record<string, Dag>
 })
 
 export function hentBehandling(behandlingid: string) {
@@ -39,5 +40,36 @@ export function hentInntektForBehandling(behandlingId: string): Inntekt[] {
 }
 
 export function lagreInntekt(inntekt: Inntekt): Inntekt {
-    return (inntektstore[inntekt.id] = inntekt)
+    const inntekten = (inntektstore[inntekt.id] = inntekt)
+    if (inntekten.sykmeldt) {
+        lagDagoversikt(inntekt)
+    }
+    return inntekten
+}
+
+export function hentDagoversikt(inntektId: string) {
+    const keys = Object.keys(dager)
+    return keys.map((k) => dager[k]).filter((f) => f.inntektId == inntektId)
+}
+
+export function lagDagoversikt(inntekt: Inntekt) {
+    const behandling = hentBehandling(inntekt.behandlingId)
+    if (!behandling) {
+        return
+    }
+    const fom = dayjs(behandling.fom)
+    const tom = dayjs(behandling.tom)
+    // loop over dager og lagre
+    for (let i = 0; i < tom.diff(fom, 'day'); i++) {
+        const dato = fom.add(i, 'day').format('YYYY-MM-DD')
+        const erHelg = dayjs(dato).day() == 0 || dayjs(dato).day() == 6
+
+        const dag = {
+            id: inntekt.id + dato,
+            inntektId: inntekt.id,
+            dagtype: erHelg ? 'helg' : 'syk',
+            dato: dato,
+        }
+        dager[dag.id] = dag
+    }
 }
