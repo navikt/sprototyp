@@ -39,7 +39,6 @@ export const personer: Person[] = [
                 fom: '2025-01-01',
                 tom: '2025-01-20',
                 id: '123456',
-
                 arbeidsgiver: { navn: 'MATBUTIKKEN', orgnummer: '999333654' },
                 arbeidssituasjon: 'ARBEIDSTAKER',
             }),
