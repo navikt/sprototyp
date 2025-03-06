@@ -26,6 +26,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ akt
             if (seenInntekt.has(inntektKey)) {
                 return
             }
+            seenInntekt.add(inntektKey)
             const inntekt = {
                 id: v4(),
                 sykmeldt: true,
