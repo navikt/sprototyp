@@ -228,6 +228,7 @@ export default function Page(): ReactElement {
 
             <div>
                 <Select
+                    size="small"
                     label="Nytt vilkår"
                     value={selectedCustomVilkarId}
                     onChange={(e) => setSelectedCustomVilkarId(e.target.value)}
