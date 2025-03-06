@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactElement, useState } from 'react'
-import { BodyShort, Radio, RadioGroup, Table, Select, Button } from '@navikt/ds-react'
+import { BodyShort, Radio, RadioGroup, Table, Select, Button, Textarea } from '@navikt/ds-react'
 import {
     CheckmarkCircleFillIcon,
     XMarkOctagonFillIcon,
@@ -240,7 +240,7 @@ export default function Page(): ReactElement {
                         </option>
                     ))}
                 </Select>
-                <Button onClick={handleAddCustomVilkars} className="mt-2" variant="secondary-neutral">
+                <Button onClick={handleAddCustomVilkars} className="mt-2" variant="secondary-neutral" size="small">
                     Legg til
                 </Button>
             </div>
@@ -250,6 +250,8 @@ export default function Page(): ReactElement {
 
 function EnkeltVilkarRad({ name }: { name: string }) {
     const [vurdering, setVurdering] = useState<string | null>(null)
+
+    const [expanded, setExpanded] = useState(false)
 
     function oppfyltTekst(vurdering: string | null) {
         switch (vurdering) {
@@ -269,9 +271,12 @@ function EnkeltVilkarRad({ name }: { name: string }) {
         <Table.ExpandableRow
             togglePlacement="right"
             expandOnRowClick={true}
+            open={expanded}
+            onOpenChange={(open) => setExpanded(open)}
             content={
                 <div className="bg-blue-50 p-4 rounded">
                     <RadioGroup
+                        className="mb-4"
                         size="small"
                         legend="Er vilkåret oppfylt?"
                         value={vurdering}
@@ -282,6 +287,27 @@ function EnkeltVilkarRad({ name }: { name: string }) {
                         <Radio value="uavklart">Uavklart</Radio>
                         <Radio value="ikke-aktuelt">Ikke aktuelt</Radio>
                     </RadioGroup>
+                    <Textarea className="mb-4" size="small" label="Notat til beslutter" />
+                    <div className="flex gap-2">
+                        <Button
+                            variant="primary"
+                            size="small"
+                            onClick={() => {
+                                setExpanded(false)
+                            }}
+                        >
+                            Lagre
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            size="small"
+                            onClick={() => {
+                                setExpanded(false)
+                            }}
+                        >
+                            Avbryt
+                        </Button>
+                    </div>
                 </div>
             }
         >
