@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 
 import { useBehandling } from '@hooks/queries/useBehandling'
 import { Behandling } from '@typer/manuellbehandlingtypes'
+import { IndividuellBegrunnelse } from '@components/venstremeny/individuellBegrunnelse/IndividuellBegrunnelse'
 
 import styles from './Venstremeny.module.css'
 
@@ -17,9 +18,7 @@ export const VenstremenyBehandling = (): ReactElement => {
             <SykmeldingPeriode behandling={behandling} />
 
             <div>
-                <Button variant="tertiary" size="xsmall">
-                    Skriv individuell begrunnelse
-                </Button>
+                <IndividuellBegrunnelse />
             </div>
             <div>
                 <Button size="small">Send til godkjenning</Button>
