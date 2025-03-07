@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { Button, Checkbox, Heading, HStack, Table } from '@navikt/ds-react'
+import { Button, Checkbox, Heading, HStack, Select, Table, Textarea, TextField } from '@navikt/ds-react'
 import { MultiplyIcon, PersonPencilIcon } from '@navikt/aksel-icons'
 
 import { useDager } from '@hooks/queries/useDager'
@@ -43,7 +43,7 @@ export const Utbetalingstabell = ({ inntekt }: UtbetalingstabellProps): ReactEle
                     </Button>
                 )}
             </HStack>
-            <Table aria-label="Dager" size="small" className="mt-4">
+            <Table aria-label="Dager" size="small" className="mt-4 mb-4">
                 <Table.Header>
                     <Table.Row>
                         {editMode && (
@@ -96,6 +96,45 @@ export const Utbetalingstabell = ({ inntekt }: UtbetalingstabellProps): ReactEle
                     ))}
                 </Table.Body>
             </Table>
+
+            {editMode && (
+                <div>
+                    <Heading
+                        size="small"
+                        spacing
+                    >{`Fyll inn hva de ${selectedDager.length} valgte dagene skal endres til`}</Heading>
+                    <div className="flex gap-1 mb-4 items-end">
+                        <Select label="Dagtype" size="small">
+                            <option>Syk</option>
+                            <option>Ferie</option>
+                            <option>Permisjon</option>
+                            <option>Arbeid</option>
+                        </Select>
+                        <TextField size="small" label="Grad" type="number" />
+                        <div>
+                            <Button size="small" variant="secondary">
+                                Endre
+                            </Button>
+                        </div>
+                    </div>
+                    <Textarea
+                        className="mb-4"
+                        label="Notat til beslutter"
+                        description={
+                            'Begrunn hvorfor det er gjort endringer i sykdomstidslinjen.\n' +
+                            'Teksten vises ikke til den sykmeldte, med mindre hen ber om innsyn.'
+                        }
+                    />
+                    <div>
+                        <Button variant="secondary" size="small">
+                            Ferdig
+                        </Button>
+                        <Button variant="tertiary" size="small">
+                            Avbryt
+                        </Button>
+                    </div>
+                </div>
+            )}
         </>
     )
 }
