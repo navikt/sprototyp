@@ -67,7 +67,7 @@ export function lagDagoversikt(inntekt: Inntekt) {
         const dag = {
             id: inntekt.id + dato,
             inntektId: inntekt.id,
-            dagtype: erHelg ? 'helg' : 'syk',
+            dagtype: erHelg ? 'Helg' : 'Syk',
             dato: dato,
         }
         dager[dag.id] = dag

@@ -43,7 +43,7 @@ export default function Page(): ReactElement {
                 .map((inntekt) => {
                     return (
                         <Tabs.Panel key={inntekt.id + 'panel'} value={inntekt.id}>
-                            <Utbetalingstabell inntektId={inntekt.id}></Utbetalingstabell>
+                            <Utbetalingstabell inntekt={inntekt}></Utbetalingstabell>
                         </Tabs.Panel>
                     )
                 })}
