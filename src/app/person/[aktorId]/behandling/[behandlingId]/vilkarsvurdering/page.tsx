@@ -2,12 +2,7 @@
 
 import React, { ReactElement, useState } from 'react'
 import { BodyShort, Radio, RadioGroup, Table, Select, Button, Textarea, Detail } from '@navikt/ds-react'
-import {
-    CheckmarkCircleFillIcon,
-    XMarkOctagonFillIcon,
-    QuestionmarkCircleFillIcon,
-    ExclamationmarkTriangleFillIcon,
-} from '@navikt/aksel-icons'
+import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon, CircleBrokenIcon } from '@navikt/aksel-icons'
 
 import { sakstyper, regler, Regel } from '@components/vilkarsvurdering/vilkar'
 
@@ -57,10 +52,10 @@ export default function Page(): ReactElement {
                     <Table.Row>
                         <Table.HeaderCell />
                         <Table.HeaderCell scope="col">
-                            <BodyShort>Vilkår</BodyShort>
+                            <BodyShort className="font-bold">Vilkår</BodyShort>
                         </Table.HeaderCell>
                         <Table.HeaderCell scope="col">
-                            <BodyShort>Vurdering</BodyShort>
+                            <BodyShort className="font-bold">Vurdering</BodyShort>
                         </Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
@@ -107,8 +102,7 @@ function EnkeltVilkarRad({ regel }: { regel: Regel }) {
             case 'nei':
                 return 'Ikke oppfylt'
             case 'unntak':
-            case 'ikke-aktuelt':
-                return '---'
+                return 'Unntak'
             default:
                 return ''
         }
@@ -142,10 +136,9 @@ function EnkeltVilkarRad({ regel }: { regel: Regel }) {
                             <Radio value="ja">Ja</Radio>
                             <Radio value="nei">Nei</Radio>
                             <Radio value="unntak">Unntak</Radio>
-                            <Radio value="ikke-aktuelt">Ikke aktuelt</Radio>
                         </RadioGroup>
                         <Textarea className="mb-4" size="small" label="Notat til beslutter" />
-                        <div className="flex gap-2">
+                        <div className="flex justify-between">
                             <Button
                                 variant="primary"
                                 size="small"
@@ -156,13 +149,15 @@ function EnkeltVilkarRad({ regel }: { regel: Regel }) {
                                 Lagre
                             </Button>
                             <Button
-                                variant="secondary"
+                                variant="secondary-neutral"
                                 size="small"
                                 onClick={() => {
+                                    // Fjern fra vilkårliste
+
                                     setExpanded(false)
                                 }}
                             >
-                                Avbryt
+                                Ikke aktuelt
                             </Button>
                         </div>
                     </div>
@@ -185,10 +180,8 @@ function Ikon({ vurdering }: { vurdering: string | null }) {
         case 'nei':
             return <XMarkOctagonFillIcon color="var(--a-icon-danger)" />
         case 'unntak':
-            return <QuestionmarkCircleFillIcon color="var(--a-icon-info)" />
-        case 'ikke-aktuelt':
-            return <ExclamationmarkTriangleFillIcon color="var(--a-icon-warning)" />
+            return <CircleBrokenIcon color="var(--a-icon-info)" />
         default:
-            return <QuestionmarkCircleFillIcon color="var(--a-icon-info)" />
+            return null
     }
 }
