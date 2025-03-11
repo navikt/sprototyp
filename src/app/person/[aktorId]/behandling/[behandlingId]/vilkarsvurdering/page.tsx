@@ -22,7 +22,7 @@ export default function Page(): ReactElement {
     const currentVilkarIds = [...baseVilkarIds, ...customVilkarIds]
 
     // Filtrer ut de vilkårene som ikke allerede er valgt
-    const availableVilkarOptions = regler.filter((vilkar) => !currentVilkarIds.includes(vilkar.navn))
+    const availableVilkarOptions = regler.filter((vilkar) => !currentVilkarIds.includes(vilkar.id))
 
     const handleAddCustomVilkars = () => {
         if (selectedCustomVilkarId !== '') {
@@ -65,8 +65,8 @@ export default function Page(): ReactElement {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {currentVilkarIds.map((navn) => {
-                        const vilkar = regler.find((v) => v.navn === navn)
+                    {currentVilkarIds.map((id) => {
+                        const vilkar = regler.find((v) => v.id === id)
                         if (!vilkar) return null
                         return <EnkeltVilkarRad key={vilkar.navn} regel={vilkar} />
                     })}
@@ -76,14 +76,14 @@ export default function Page(): ReactElement {
             <div>
                 <Select
                     size="small"
-                    label="Nytt vilkår"
+                    label="Ny regel"
                     value={selectedCustomVilkarId}
                     onChange={(e) => setSelectedCustomVilkarId(e.target.value)}
                 >
                     <option value="">-- Velg regel --</option>
-                    {availableVilkarOptions.map((vilkar) => (
-                        <option key={vilkar.navn} value={vilkar.navn}>
-                            {vilkar.navn}
+                    {availableVilkarOptions.map((regel) => (
+                        <option key={regel.navn} value={regel.id}>
+                            {regel.navn}
                         </option>
                     ))}
                 </Select>
@@ -106,7 +106,7 @@ function EnkeltVilkarRad({ regel }: { regel: Regel }) {
                 return 'Oppfylt'
             case 'nei':
                 return 'Ikke oppfylt'
-            case 'uavklart':
+            case 'unntak':
             case 'ikke-aktuelt':
                 return '---'
             default:
@@ -141,7 +141,7 @@ function EnkeltVilkarRad({ regel }: { regel: Regel }) {
                         >
                             <Radio value="ja">Ja</Radio>
                             <Radio value="nei">Nei</Radio>
-                            <Radio value="uavklart">Uavklart</Radio>
+                            <Radio value="unntak">Unntak</Radio>
                             <Radio value="ikke-aktuelt">Ikke aktuelt</Radio>
                         </RadioGroup>
                         <Textarea className="mb-4" size="small" label="Notat til beslutter" />
@@ -184,7 +184,7 @@ function Ikon({ vurdering }: { vurdering: string | null }) {
             return <CheckmarkCircleFillIcon color="var(--a-icon-success)" />
         case 'nei':
             return <XMarkOctagonFillIcon color="var(--a-icon-danger)" />
-        case 'uavklart':
+        case 'unntak':
             return <QuestionmarkCircleFillIcon color="var(--a-icon-info)" />
         case 'ikke-aktuelt':
             return <ExclamationmarkTriangleFillIcon color="var(--a-icon-warning)" />

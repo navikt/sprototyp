@@ -1,6 +1,8 @@
 export interface Regel {
     navn: string
+    id: string
     lovverk: LovverkPeker[]
+    unntakbar?: boolean
 }
 
 interface LovverkPeker {
@@ -12,84 +14,10 @@ interface LovverkPeker {
     bokstav?: string
 }
 
-const utelandsfart = 'Sjekk om norsk skip i utenriksfart, betydning for kap 2 medlemskap'
-const opptjeneingUnntakUtlandsfart = 'Opptjening hovedregel, unntak fra 8-2 for utenriksfart'
-const tapAvPensjonsgivendeInntekt = 'Tap av pensjonsgivende inntekt'
-const sykepengegrunnlaget = 'Sykepengegrunnlaget'
-const minsteInntektHalvG = 'Krav til minste inntekt (1/2G)'
-const sendtSøknadIRiktigTid = 'Sendt søknad i riktig tid'
-const medlemskap = 'Medlemskap'
-const opptjeningstid = 'Opptjeningstid'
-export const regler: Regel[] = [
+const fellesRegler = [
     {
-        navn: utelandsfart,
-        lovverk: [
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-44',
-            },
-        ],
-    },
-    {
-        navn: opptjeneingUnntakUtlandsfart,
-        lovverk: [
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-2',
-            },
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-44',
-                bokstav: 'b',
-            },
-        ],
-    },
-    {
-        navn: tapAvPensjonsgivendeInntekt,
-        lovverk: [
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-3',
-            },
-        ],
-    },
-    {
-        navn: sykepengegrunnlaget,
-        lovverk: [
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-28',
-            },
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-29',
-            },
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-30',
-            },
-        ],
-    },
-    {
-        navn: minsteInntektHalvG,
-        lovverk: [
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '8-3',
-                ledd: 2,
-            },
-        ],
-    },
-    {
-        navn: sendtSøknadIRiktigTid,
+        navn: 'Søknaden er fremsatt til riktig tid',
+        id: 'R1',
         lovverk: [
             {
                 lovverk: 'Folketrygdloven',
@@ -99,32 +27,9 @@ export const regler: Regel[] = [
         ],
     },
     {
-        navn: medlemskap,
-        lovverk: [
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '2-1',
-            },
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '2-2',
-            },
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '2-3',
-            },
-            {
-                lovverk: 'Folketrygdloven',
-                lovverksversjon: '2020-01-01',
-                paragraf: '2-4',
-            },
-        ],
-    },
-    {
-        navn: opptjeningstid,
+        navn: 'Den sykemeldte har tilstrekkelig opptjening',
+        id: 'R4',
+        unntakbar: true,
         lovverk: [
             {
                 lovverk: 'Folketrygdloven',
@@ -133,16 +38,76 @@ export const regler: Regel[] = [
             },
         ],
     },
+    {
+        navn: 'Den sykemeldte har tapt pensjonsgivende inntekt på grunn av arbeidsuførhet',
+        id: 'R5',
+        lovverk: [
+            {
+                lovverk: 'Folketrygdloven',
+                lovverksversjon: '2020-01-01',
+                paragraf: '8-3',
+            },
+        ],
+    },
+    {
+        navn: 'Den sykemeldte oppfyller minstekrav til sykepengegrunnlag',
+        id: 'R6',
+        lovverk: [
+            {
+                lovverk: 'Folketrygdloven',
+                lovverksversjon: '2020-01-01',
+                paragraf: '8-3',
+                ledd: 2,
+            },
+        ],
+    },
 ]
 
+const utenriksfartRegler: Regel[] = [
+    {
+        navn: 'Den sykemeldte er ansatt på et norsk skip i utenriksfart',
+        id: 'R2',
+        lovverk: [
+            {
+                lovverk: 'Folketrygdloven',
+                lovverksversjon: '2020-01-01',
+                paragraf: '8-44',
+                ledd: 1,
+                punktum: 1,
+            },
+        ],
+    },
+    {
+        navn: 'Det sykemeldte er arbeidsufør som arbeidstaker på skip',
+        id: 'R3',
+        lovverk: [
+            {
+                lovverk: 'Folketrygdloven',
+                lovverksversjon: '2020-01-01',
+                paragraf: '8-44',
+                ledd: 1,
+                bokstav: 'a',
+            },
+        ],
+    },
+    {
+        navn: 'Unntak fra hovedregelen om tilstrekkelig opptjening er til stede',
+        id: 'R4_U',
+        unntakbar: true,
+        lovverk: [
+            {
+                lovverk: 'Folketrygdloven',
+                lovverksversjon: '2020-01-01',
+                paragraf: '8-44',
+                bokstav: 'b',
+            },
+        ],
+    },
+]
+
+export const regler: Regel[] = [...fellesRegler, ...utenriksfartRegler]
+
 export const sakstyper: { [key: string]: string[] } = {
-    'Norsk skip utenlandsfart': [
-        utelandsfart,
-        opptjeneingUnntakUtlandsfart,
-        tapAvPensjonsgivendeInntekt,
-        sykepengegrunnlaget,
-        minsteInntektHalvG,
-        sendtSøknadIRiktigTid,
-    ],
-    'Midlertidig ute av inntektsgivende arbeid': [sendtSøknadIRiktigTid, medlemskap, opptjeningstid],
+    Sjømenn: ['R1', 'R2', 'R3', 'R4', 'R4_U', 'R5', 'R6'],
+    'Midlertidig ute av inntektsgivende arbeid': ['R1', 'R4', 'R5', 'R6'],
 }
