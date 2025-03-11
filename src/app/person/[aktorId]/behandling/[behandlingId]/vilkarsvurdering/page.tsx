@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactElement, useState } from 'react'
-import { BodyShort, Radio, RadioGroup, Table, Select, Button, Textarea } from '@navikt/ds-react'
+import { BodyShort, Radio, RadioGroup, Table, Select, Button, Textarea, Detail } from '@navikt/ds-react'
 import {
     CheckmarkCircleFillIcon,
     XMarkOctagonFillIcon,
@@ -9,7 +9,7 @@ import {
     ExclamationmarkTriangleFillIcon,
 } from '@navikt/aksel-icons'
 
-import { sakstyper, regler } from '@components/vilkarsvurdering/vilkar'
+import { sakstyper, regler, Regel } from '@components/vilkarsvurdering/vilkar'
 
 export default function Page(): ReactElement {
     const [selectedCaseType, setSelectedCaseType] = useState('velg')
@@ -68,7 +68,7 @@ export default function Page(): ReactElement {
                     {currentVilkarIds.map((navn) => {
                         const vilkar = regler.find((v) => v.navn === navn)
                         if (!vilkar) return null
-                        return <EnkeltVilkarRad key={vilkar.navn} name={vilkar.navn} />
+                        return <EnkeltVilkarRad key={vilkar.navn} regel={vilkar} />
                     })}
                 </Table.Body>
             </Table>
@@ -95,7 +95,7 @@ export default function Page(): ReactElement {
     )
 }
 
-function EnkeltVilkarRad({ name }: { name: string }) {
+function EnkeltVilkarRad({ regel }: { regel: Regel }) {
     const [vurdering, setVurdering] = useState<string | null>(null)
 
     const [expanded, setExpanded] = useState(false)
@@ -121,47 +121,58 @@ function EnkeltVilkarRad({ name }: { name: string }) {
             open={expanded}
             onOpenChange={(open) => setExpanded(open)}
             content={
-                <div className="bg-blue-50 p-4 rounded">
-                    <RadioGroup
-                        className="mb-4"
-                        size="small"
-                        legend="Er vilkåret oppfylt?"
-                        value={vurdering}
-                        onChange={(e) => setVurdering(e)}
-                    >
-                        <Radio value="ja">Ja</Radio>
-                        <Radio value="nei">Nei</Radio>
-                        <Radio value="uavklart">Uavklart</Radio>
-                        <Radio value="ikke-aktuelt">Ikke aktuelt</Radio>
-                    </RadioGroup>
-                    <Textarea className="mb-4" size="small" label="Notat til beslutter" />
-                    <div className="flex gap-2">
-                        <Button
-                            variant="primary"
+                <>
+                    {regel.lovverk.map((lovverk) => {
+                        const tekst = []
+                        tekst.push(lovverk.lovverk)
+                        tekst.push('§ ' + lovverk.paragraf)
+                        if (lovverk.ledd) tekst.push(lovverk.ledd)
+                        if (lovverk.bokstav) tekst.push(lovverk.bokstav)
+                        const lovverkTekst = tekst.join(' ')
+                        return <Detail key={lovverkTekst}>{lovverkTekst}</Detail>
+                    })}
+                    <div className="bg-blue-50 p-4 rounded">
+                        <RadioGroup
+                            className="mb-4"
                             size="small"
-                            onClick={() => {
-                                setExpanded(false)
-                            }}
+                            legend="Er vilkåret oppfylt?"
+                            value={vurdering}
+                            onChange={(e) => setVurdering(e)}
                         >
-                            Lagre
-                        </Button>
-                        <Button
-                            variant="secondary"
-                            size="small"
-                            onClick={() => {
-                                setExpanded(false)
-                            }}
-                        >
-                            Avbryt
-                        </Button>
+                            <Radio value="ja">Ja</Radio>
+                            <Radio value="nei">Nei</Radio>
+                            <Radio value="uavklart">Uavklart</Radio>
+                            <Radio value="ikke-aktuelt">Ikke aktuelt</Radio>
+                        </RadioGroup>
+                        <Textarea className="mb-4" size="small" label="Notat til beslutter" />
+                        <div className="flex gap-2">
+                            <Button
+                                variant="primary"
+                                size="small"
+                                onClick={() => {
+                                    setExpanded(false)
+                                }}
+                            >
+                                Lagre
+                            </Button>
+                            <Button
+                                variant="secondary"
+                                size="small"
+                                onClick={() => {
+                                    setExpanded(false)
+                                }}
+                            >
+                                Avbryt
+                            </Button>
+                        </div>
                     </div>
-                </div>
+                </>
             }
         >
             <Table.DataCell scope="row">
                 <Ikon vurdering={vurdering} />
             </Table.DataCell>
-            <Table.DataCell scope="row">{name}</Table.DataCell>
+            <Table.DataCell scope="row">{regel.navn}</Table.DataCell>
             <Table.DataCell scope="row">{oppfyltTekst(vurdering)}</Table.DataCell>
         </Table.ExpandableRow>
     )

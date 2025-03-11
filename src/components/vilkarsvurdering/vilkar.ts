@@ -1,4 +1,4 @@
-interface Regel {
+export interface Regel {
     navn: string
     lovverk: LovverkPeker[]
 }
@@ -17,7 +17,7 @@ const opptjeneingUnntakUtlandsfart = 'Opptjening hovedregel, unntak fra 8-2 for 
 const tapAvPensjonsgivendeInntekt = 'Tap av pensjonsgivende inntekt'
 const sykepengegrunnlaget = 'Sykepengegrunnlaget'
 const minsteInntektHalvG = 'Krav til minste inntekt (1/2G)'
-const sendtSøknadIRiktigTid = 'sendt søknad i riktig tid'
+const sendtSøknadIRiktigTid = 'Sendt søknad i riktig tid'
 const medlemskap = 'Medlemskap'
 const opptjeningstid = 'Opptjeningstid'
 export const regler: Regel[] = [
