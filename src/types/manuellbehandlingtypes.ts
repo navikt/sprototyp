@@ -14,6 +14,17 @@ export interface Inntekt extends NyInntekt {
     behandlingId: string
 }
 
+export interface Vilkarsvurdering {
+    id: string
+    regelId: string
+    behandlingId: string
+    vurdering: string | undefined
+}
+
+export interface NyVilkarsvurdering {
+    regelId: string
+}
+
 export interface NyInntekt {
     sykmeldt: boolean
     inntektstype: RSArbeidssituasjonType | null

@@ -1,7 +1,7 @@
 import { nextleton } from 'nextleton'
 import dayjs from 'dayjs'
 
-import { Behandling, Dag, Inntekt } from '@typer/manuellbehandlingtypes'
+import { Behandling, Dag, Inntekt, Vilkarsvurdering } from '@typer/manuellbehandlingtypes'
 
 export const behandlingstore = nextleton('behandlinger', () => {
     return {} as Record<string, Behandling>
@@ -9,6 +9,10 @@ export const behandlingstore = nextleton('behandlinger', () => {
 
 export const inntektstore = nextleton('inntekter', () => {
     return {} as Record<string, Inntekt>
+})
+
+export const vilkaarstore = nextleton('vilkaar', () => {
+    return {} as Record<string, Vilkarsvurdering>
 })
 
 export const dager = nextleton('dag', () => {
@@ -37,6 +41,20 @@ export function hentInntektForBehandling(behandlingId: string): Inntekt[] {
     const keys = Object.keys(inntektstore)
 
     return keys.map((k) => inntektstore[k]).filter((f) => f.behandlingId == behandlingId)
+}
+
+export function hentVilkaarForBehandling(behandlingId: string): Vilkarsvurdering[] {
+    const keys = Object.keys(inntektstore)
+
+    return keys.map((k) => vilkaarstore[k]).filter((f) => f.behandlingId == behandlingId)
+}
+
+export function lagreVilkaar(vilkaar: Vilkarsvurdering): Vilkarsvurdering {
+    return (vilkaarstore[vilkaar.id] = vilkaar)
+}
+
+export function slettVilkaar(vilkaarId: string) {
+    delete vilkaarstore[vilkaarId]
 }
 
 export function lagreInntekt(inntekt: Inntekt): Inntekt {
