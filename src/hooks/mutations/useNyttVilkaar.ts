@@ -5,7 +5,7 @@ import { NyVilkarsvurdering, Vilkarsvurdering } from '@typer/manuellbehandlingty
 
 interface MutationProps {
     request: NyVilkarsvurdering
-    callback: (v: Vilkarsvurdering[]) => void
+    callback?: (v: Vilkarsvurdering[]) => void
 }
 
 export function useNyttVilkaar() {
@@ -23,7 +23,9 @@ export function useNyttVilkaar() {
             ).json()) as Vilkarsvurdering[]
         },
         onSuccess: async (v, r) => {
-            r.callback(v)
+            if (r.callback) {
+                r.callback(v)
+            }
             queryClient
                 .invalidateQueries({
                     queryKey: ['vilkar', params.aktorId, params.behandlingId],

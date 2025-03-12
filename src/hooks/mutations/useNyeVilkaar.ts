@@ -7,7 +7,6 @@ interface MutationProps {
     request: {
         vilkar: string[]
     }
-    callback: (v: Vilkarsvurdering[]) => void
 }
 
 export function useNyeVilkaar() {
@@ -24,8 +23,7 @@ export function useNyeVilkaar() {
                 })
             ).json()) as Vilkarsvurdering[]
         },
-        onSuccess: async (v, r) => {
-            r.callback(v)
+        onSuccess: async () => {
             queryClient
                 .invalidateQueries({
                     queryKey: ['vilkar', params.aktorId, params.behandlingId],

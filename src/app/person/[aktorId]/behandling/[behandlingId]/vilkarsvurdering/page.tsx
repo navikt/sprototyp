@@ -5,32 +5,28 @@ import { BodyShort, Radio, RadioGroup, Table, Select, Button, Textarea, Detail }
 import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon, CircleBrokenIcon } from '@navikt/aksel-icons'
 
 import { sakstyper, regler, Regel } from '@components/vilkarsvurdering/vilkar'
+import { useVilkar } from '@hooks/queries/useVilkar'
+import { useNyeVilkaar } from '@hooks/mutations/useNyeVilkaar'
+import { Vilkarsvurdering } from '@typer/manuellbehandlingtypes'
+import { useDeleteVilkar } from '@hooks/mutations/useDeleteVilkar'
+import { useNyttVilkaar } from '@hooks/mutations/useNyttVilkaar'
 
 export default function Page(): ReactElement {
     const [selectedCaseType, setSelectedCaseType] = useState('velg')
-    const [customVilkarIds, setCustomVilkarIds] = useState<string[]>([])
     const [selectedCustomVilkarId, setSelectedCustomVilkarId] = useState<string>('')
 
-    // Hent de base vilkårs-IDene for valgt sakstype
-    const baseVilkarIds = sakstyper[selectedCaseType] || []
-    // Kombiner med eventuelle egendefinerte vilkårs-IDer
-    const currentVilkarIds = [...baseVilkarIds, ...customVilkarIds]
-
-    // Filtrer ut de vilkårene som ikke allerede er valgt
-    const availableVilkarOptions = regler.filter((vilkar) => !currentVilkarIds.includes(vilkar.id))
-
-    const handleAddCustomVilkars = () => {
-        if (selectedCustomVilkarId !== '') {
-            setCustomVilkarIds([...customVilkarIds, selectedCustomVilkarId])
-            setSelectedCustomVilkarId('')
-        }
-    }
+    const { data: vilkar } = useVilkar()
+    const { mutate: leggTilNyeVilkaar } = useNyeVilkaar()
+    const { mutate: leggTilNyttVilkaar } = useNyttVilkaar()
 
     // Ved bytte av sakstype tømmes egendefinerte vilkår
     const handleCaseTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCaseType(e.target.value)
-        setCustomVilkarIds([])
+        const reglerFraCase = sakstyper[e.target.value]
+        leggTilNyeVilkaar({ request: { vilkar: reglerFraCase } })
     }
+
+    const availableVilkarOptions = regler.filter((r) => !(vilkar?.map((v) => v.regelId) || []).includes(r.id))
 
     return (
         <div className="mt-4">
@@ -60,10 +56,9 @@ export default function Page(): ReactElement {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {currentVilkarIds.map((id) => {
-                        const vilkar = regler.find((v) => v.id === id)
-                        if (!vilkar) return null
-                        return <EnkeltVilkarRad key={vilkar.navn} regel={vilkar} />
+                    {(vilkar || []).map((v) => {
+                        //TODO enb sortering
+                        return <EnkeltVilkarRad key={v.id} vilkarsvurdering={v} />
                     })}
                 </Table.Body>
             </Table>
@@ -82,7 +77,14 @@ export default function Page(): ReactElement {
                         </option>
                     ))}
                 </Select>
-                <Button onClick={handleAddCustomVilkars} className="mt-2" variant="secondary-neutral" size="small">
+                <Button
+                    className="mt-2"
+                    variant="secondary-neutral"
+                    size="small"
+                    onClick={() => {
+                        leggTilNyttVilkaar({ request: { regelId: selectedCustomVilkarId } })
+                    }}
+                >
                     Legg til
                 </Button>
             </div>
@@ -90,10 +92,12 @@ export default function Page(): ReactElement {
     )
 }
 
-function EnkeltVilkarRad({ regel }: { regel: Regel }) {
+function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurdering }) {
     const [vurdering, setVurdering] = useState<string | null>(null)
 
     const [expanded, setExpanded] = useState(false)
+    const { mutate: slettVilkar } = useDeleteVilkar()
+    const regel = regler.find((r) => r.id === vilkarsvurdering.regelId) as Regel
 
     function oppfyltTekst(vurdering: string | null) {
         switch (vurdering) {
@@ -153,8 +157,7 @@ function EnkeltVilkarRad({ regel }: { regel: Regel }) {
                                 size="small"
                                 onClick={() => {
                                     // Fjern fra vilkårliste
-
-                                    setExpanded(false)
+                                    slettVilkar({ vilkarId: vilkarsvurdering.id })
                                 }}
                             >
                                 Ikke aktuelt

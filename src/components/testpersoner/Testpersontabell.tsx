@@ -38,6 +38,7 @@ export function Testpersontabell(): ReactElement {
                                 className="hover:cursor-pointer hover:underline border-0 text-text-action"
                                 onClick={() => {
                                     setFnr(person.fodselsnummer)
+                                    router.push('/person/' + person.aktorId)
                                 }}
                             >
                                 <Table.DataCell className="border-0">{person.navn}</Table.DataCell>

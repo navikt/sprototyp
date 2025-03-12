@@ -6,6 +6,7 @@ export interface Behandling {
     tom: string
     aktorid: string
     skjaring: string
+    sakstype?: string
     soknadIder: string[]
 }
 

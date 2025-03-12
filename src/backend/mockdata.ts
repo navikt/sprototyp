@@ -44,7 +44,7 @@ export function hentInntektForBehandling(behandlingId: string): Inntekt[] {
 }
 
 export function hentVilkaarForBehandling(behandlingId: string): Vilkarsvurdering[] {
-    const keys = Object.keys(inntektstore)
+    const keys = Object.keys(vilkaarstore)
 
     return keys.map((k) => vilkaarstore[k]).filter((f) => f.behandlingId == behandlingId)
 }
