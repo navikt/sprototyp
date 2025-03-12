@@ -10,6 +10,7 @@ import { useNyeVilkaar } from '@hooks/mutations/useNyeVilkaar'
 import { Vilkarsvurdering } from '@typer/manuellbehandlingtypes'
 import { useDeleteVilkar } from '@hooks/mutations/useDeleteVilkar'
 import { useNyttVilkaar } from '@hooks/mutations/useNyttVilkaar'
+import { useUpdateVilkaar } from '@hooks/mutations/useUpdateVilkar'
 
 export default function Page(): ReactElement {
     const [selectedCaseType, setSelectedCaseType] = useState('velg')
@@ -27,7 +28,9 @@ export default function Page(): ReactElement {
     }
 
     const availableVilkarOptions = regler.filter((r) => !(vilkar?.map((v) => v.regelId) || []).includes(r.id))
+    const { mutate: updateVilkar } = useUpdateVilkaar()
 
+    const alleVilkarUndefined = vilkar?.every((v) => v.vurdering === undefined)
     return (
         <div className="mt-4">
             <div className="mb-4">
@@ -46,7 +49,21 @@ export default function Page(): ReactElement {
             <Table size="small" className="mb-8">
                 <Table.Header>
                     <Table.Row>
-                        <Table.HeaderCell />
+                        <Table.HeaderCell>
+                            {alleVilkarUndefined && (
+                                <Button
+                                    size="small"
+                                    variant="tertiary"
+                                    icon={<CheckmarkCircleFillIcon color="var(--a-icon-success)" title="check alle" />}
+                                    onClick={() => {
+                                        vilkar?.forEach((v) => {
+                                            const oppdatering = { ...v, vurdering: 'ja' }
+                                            updateVilkar({ request: oppdatering })
+                                        })
+                                    }}
+                                />
+                            )}
+                        </Table.HeaderCell>
                         <Table.HeaderCell scope="col">
                             <BodyShort className="font-bold">Vilkår</BodyShort>
                         </Table.HeaderCell>
@@ -93,13 +110,13 @@ export default function Page(): ReactElement {
 }
 
 function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurdering }) {
-    const [vurdering, setVurdering] = useState<string | null>(null)
-
+    const { mutate: updateVilkar } = useUpdateVilkaar()
     const [expanded, setExpanded] = useState(false)
     const { mutate: slettVilkar } = useDeleteVilkar()
     const regel = regler.find((r) => r.id === vilkarsvurdering.regelId) as Regel
+    const vurdering = vilkarsvurdering.vurdering
 
-    function oppfyltTekst(vurdering: string | null) {
+    function oppfyltTekst(vurdering: string | undefined) {
         switch (vurdering) {
             case 'ja':
                 return 'Oppfylt'
@@ -135,7 +152,10 @@ function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurder
                             size="small"
                             legend="Er vilkåret oppfylt?"
                             value={vurdering}
-                            onChange={(e) => setVurdering(e)}
+                            onChange={(e) => {
+                                const oppdatering = { ...vilkarsvurdering, vurdering: e.target.value }
+                                updateVilkar({ request: oppdatering })
+                            }}
                         >
                             <Radio value="ja">Ja</Radio>
                             <Radio value="nei">Nei</Radio>
@@ -176,7 +196,7 @@ function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurder
     )
 }
 
-function Ikon({ vurdering }: { vurdering: string | null }) {
+function Ikon({ vurdering }: { vurdering: string | undefined }) {
     switch (vurdering) {
         case 'ja':
             return <CheckmarkCircleFillIcon color="var(--a-icon-success)" />
