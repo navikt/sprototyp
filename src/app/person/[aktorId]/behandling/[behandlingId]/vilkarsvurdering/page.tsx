@@ -50,7 +50,7 @@ export default function Page(): ReactElement {
                 <Table.Header>
                     <Table.Row>
                         <Table.HeaderCell>
-                            {alleVilkarUndefined && (
+                            {alleVilkarUndefined && (vilkar?.length || 0) > 0 && (
                                 <Button
                                     size="small"
                                     variant="tertiary"
