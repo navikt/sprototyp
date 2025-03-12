@@ -11,18 +11,22 @@ import { Vilkarsvurdering } from '@typer/manuellbehandlingtypes'
 import { useDeleteVilkar } from '@hooks/mutations/useDeleteVilkar'
 import { useNyttVilkaar } from '@hooks/mutations/useNyttVilkaar'
 import { useUpdateVilkaar } from '@hooks/mutations/useUpdateVilkar'
+import { useBehandling } from '@hooks/queries/useBehandling'
+import { useUpdateBehandling } from '@hooks/mutations/useUpdateBehandling'
 
 export default function Page(): ReactElement {
-    const [selectedCaseType, setSelectedCaseType] = useState('velg')
     const [selectedCustomVilkarId, setSelectedCustomVilkarId] = useState<string>('')
+    const { data: behandling } = useBehandling()
 
     const { data: vilkar } = useVilkar()
     const { mutate: leggTilNyeVilkaar } = useNyeVilkaar()
     const { mutate: leggTilNyttVilkaar } = useNyttVilkaar()
+    const { mutate: oppdaterBehanbdling } = useUpdateBehandling()
 
     // Ved bytte av sakstype tømmes egendefinerte vilkår
     const handleCaseTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedCaseType(e.target.value)
+        oppdaterBehanbdling({ request: { sakstype: e.target.value } })
+        // update behabdling med sakstype
         const reglerFraCase = sakstyper[e.target.value]
         leggTilNyeVilkaar({ request: { vilkar: reglerFraCase } })
     }
@@ -34,8 +38,8 @@ export default function Page(): ReactElement {
     return (
         <div className="mt-4">
             <div className="mb-4">
-                <Select size="small" label="Sakstype" value={selectedCaseType} onChange={handleCaseTypeChange}>
-                    <option value="velg">-- Velg sakstype --</option>
+                <Select size="small" label="Sakstype" value={behandling?.sakstype} onChange={handleCaseTypeChange}>
+                    {!behandling?.sakstype && <option value="velg">-- Velg sakstype --</option>}
                     {Object.keys(sakstyper).map((sakstype) => {
                         return (
                             <option key={sakstype} value={sakstype}>
@@ -153,7 +157,7 @@ function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurder
                             legend="Er vilkåret oppfylt?"
                             value={vurdering}
                             onChange={(e) => {
-                                const oppdatering = { ...vilkarsvurdering, vurdering: e.target.value }
+                                const oppdatering = { ...vilkarsvurdering, vurdering: e }
                                 updateVilkar({ request: oppdatering })
                             }}
                         >
