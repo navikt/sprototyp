@@ -50,65 +50,74 @@ export default function Page(): ReactElement {
                 </Select>
             </div>
 
-            <Table size="small" className="mb-8">
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell>
-                            {alleVilkarUndefined && (vilkar?.length || 0) > 0 && (
-                                <Button
-                                    size="small"
-                                    variant="tertiary"
-                                    icon={<CheckmarkCircleFillIcon color="var(--a-icon-success)" title="check alle" />}
-                                    onClick={() => {
-                                        vilkar?.forEach((v) => {
-                                            const oppdatering = { ...v, vurdering: 'ja' }
-                                            updateVilkar({ request: oppdatering })
-                                        })
-                                    }}
-                                />
-                            )}
-                        </Table.HeaderCell>
-                        <Table.HeaderCell scope="col">
-                            <BodyShort className="font-bold">Vilkår</BodyShort>
-                        </Table.HeaderCell>
-                        <Table.HeaderCell scope="col">
-                            <BodyShort className="font-bold">Vurdering</BodyShort>
-                        </Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {(vilkar || []).map((v) => {
-                        //TODO enb sortering
-                        return <EnkeltVilkarRad key={v.id} vilkarsvurdering={v} />
-                    })}
-                </Table.Body>
-            </Table>
+            {behandling?.sakstype && (
+                <>
+                    <Table size="small" className="mb-8">
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell>
+                                    {alleVilkarUndefined && (vilkar?.length || 0) > 0 && (
+                                        <Button
+                                            size="small"
+                                            variant="tertiary"
+                                            icon={
+                                                <CheckmarkCircleFillIcon
+                                                    color="var(--a-icon-success)"
+                                                    title="check alle"
+                                                />
+                                            }
+                                            onClick={() => {
+                                                vilkar?.forEach((v) => {
+                                                    const oppdatering = { ...v, vurdering: 'ja' }
+                                                    updateVilkar({ request: oppdatering })
+                                                })
+                                            }}
+                                        />
+                                    )}
+                                </Table.HeaderCell>
+                                <Table.HeaderCell scope="col">
+                                    <BodyShort className="font-bold">Vilkår</BodyShort>
+                                </Table.HeaderCell>
+                                <Table.HeaderCell scope="col">
+                                    <BodyShort className="font-bold">Vurdering</BodyShort>
+                                </Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {(vilkar || []).map((v) => {
+                                //TODO enb sortering
+                                return <EnkeltVilkarRad key={v.id} vilkarsvurdering={v} />
+                            })}
+                        </Table.Body>
+                    </Table>
 
-            <div>
-                <Select
-                    size="small"
-                    label="Ny regel"
-                    value={selectedCustomVilkarId}
-                    onChange={(e) => setSelectedCustomVilkarId(e.target.value)}
-                >
-                    <option value="">-- Velg regel --</option>
-                    {availableVilkarOptions.map((regel) => (
-                        <option key={regel.navn} value={regel.id}>
-                            {regel.navn}
-                        </option>
-                    ))}
-                </Select>
-                <Button
-                    className="mt-2"
-                    variant="secondary-neutral"
-                    size="small"
-                    onClick={() => {
-                        leggTilNyttVilkaar({ request: { regelId: selectedCustomVilkarId } })
-                    }}
-                >
-                    Legg til
-                </Button>
-            </div>
+                    <div>
+                        <Select
+                            size="small"
+                            label="Ny regel"
+                            value={selectedCustomVilkarId}
+                            onChange={(e) => setSelectedCustomVilkarId(e.target.value)}
+                        >
+                            <option value="">-- Velg regel --</option>
+                            {availableVilkarOptions.map((regel) => (
+                                <option key={regel.navn} value={regel.id}>
+                                    {regel.navn}
+                                </option>
+                            ))}
+                        </Select>
+                        <Button
+                            className="mt-2"
+                            variant="secondary-neutral"
+                            size="small"
+                            onClick={() => {
+                                leggTilNyttVilkaar({ request: { regelId: selectedCustomVilkarId } })
+                            }}
+                        >
+                            Legg til
+                        </Button>
+                    </div>
+                </>
+            )}
         </div>
     )
 }
@@ -155,7 +164,7 @@ function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurder
                             className="mb-4"
                             size="small"
                             legend="Er vilkåret oppfylt?"
-                            value={vurdering}
+                            value={vurdering || null}
                             onChange={(e) => {
                                 const oppdatering = { ...vilkarsvurdering, vurdering: e }
                                 updateVilkar({ request: oppdatering })

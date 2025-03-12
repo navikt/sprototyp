@@ -22,11 +22,7 @@ export const JusterbarSidemeny = ({
     onChangeBredde,
     åpnesTilVenstre = false,
 }: JusterbarSidebarProps): ReactElement => {
-    const [width, setWidth] = useState(() =>
-        localStorageNavn && typeof window !== 'undefined'
-            ? parseInt(localStorage.getItem(localStorageNavn) || defaultBredde.toString())
-            : defaultBredde,
-    )
+    const [width, setWidth] = useState(() => defaultBredde)
     const isResized = useRef(false)
     const minWidth = 50
     const maxWidth = 1980
