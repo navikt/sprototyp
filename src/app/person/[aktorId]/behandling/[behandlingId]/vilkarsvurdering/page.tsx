@@ -1,7 +1,18 @@
 'use client'
 
 import React, { ReactElement, useState } from 'react'
-import { BodyShort, Radio, RadioGroup, Table, Select, Button, Textarea, Detail } from '@navikt/ds-react'
+import {
+    BodyShort,
+    Radio,
+    RadioGroup,
+    Table,
+    Select,
+    Button,
+    Textarea,
+    Detail,
+    CheckboxGroup,
+    Checkbox,
+} from '@navikt/ds-react'
 import { CheckmarkCircleFillIcon, XMarkOctagonFillIcon, CircleBrokenIcon } from '@navikt/aksel-icons'
 
 import { sakstyper, regler, Regel } from '@components/vilkarsvurdering/vilkar'
@@ -15,23 +26,19 @@ import { useBehandling } from '@hooks/queries/useBehandling'
 import { useUpdateBehandling } from '@hooks/mutations/useUpdateBehandling'
 
 export default function Page(): ReactElement {
-    const [selectedCustomVilkarId, setSelectedCustomVilkarId] = useState<string>('')
     const { data: behandling } = useBehandling()
 
     const { data: vilkar } = useVilkar()
     const { mutate: leggTilNyeVilkaar } = useNyeVilkaar()
-    const { mutate: leggTilNyttVilkaar } = useNyttVilkaar()
-    const { mutate: oppdaterBehanbdling } = useUpdateBehandling()
+    const { mutate: oppdaterBehandling } = useUpdateBehandling()
 
     // Ved bytte av sakstype tømmes egendefinerte vilkår
     const handleCaseTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        oppdaterBehanbdling({ request: { sakstype: e.target.value } })
-        // update behabdling med sakstype
+        oppdaterBehandling({ request: { sakstype: e.target.value } })
         const reglerFraCase = sakstyper[e.target.value]
         leggTilNyeVilkaar({ request: { vilkar: reglerFraCase } })
     }
 
-    const availableVilkarOptions = regler.filter((r) => !(vilkar?.map((v) => v.regelId) || []).includes(r.id))
     const { mutate: updateVilkar } = useUpdateVilkaar()
 
     const alleVilkarUndefined = vilkar?.every((v) => v.vurdering === undefined)
@@ -91,33 +98,84 @@ export default function Page(): ReactElement {
                         </Table.Body>
                     </Table>
 
-                    <div>
-                        <Select
-                            size="small"
-                            label="Ny regel"
-                            value={selectedCustomVilkarId}
-                            onChange={(e) => setSelectedCustomVilkarId(e.target.value)}
-                        >
-                            <option value="">-- Velg regel --</option>
-                            {availableVilkarOptions.map((regel) => (
-                                <option key={regel.navn} value={regel.id}>
-                                    {regel.navn}
-                                </option>
-                            ))}
-                        </Select>
-                        <Button
-                            className="mt-2"
-                            variant="secondary-neutral"
-                            size="small"
-                            onClick={() => {
-                                leggTilNyttVilkaar({ request: { regelId: selectedCustomVilkarId } })
-                            }}
-                        >
-                            Legg til
-                        </Button>
-                    </div>
+                    <LeggTilVilkar />
                 </>
             )}
+        </div>
+    )
+}
+
+function LeggTilVilkar() {
+    const { data: vilkar } = useVilkar()
+    const [adding, setAdding] = useState(false)
+    const { mutate: leggTilNyttVilkaar } = useNyttVilkaar()
+
+    const [selectedCustomVilkarIds, setSelectedCustomVilkarIds] = useState<string[]>([])
+
+    const availableVilkarOptions = regler.filter((r) => !(vilkar?.map((v) => v.regelId) || []).includes(r.id))
+    if (availableVilkarOptions.length == 0) {
+        return null
+    }
+
+    if (!adding) {
+        return (
+            <Button
+                className="mt-2"
+                variant="secondary"
+                size="small"
+                onClick={() => {
+                    setAdding(true)
+                }}
+            >
+                Legg til egendefinerte vilkår
+            </Button>
+        )
+    }
+
+    return (
+        <div className="bg-surface-subtle p-4 rounded">
+            <CheckboxGroup size="small" legend="Velg regler">
+                {availableVilkarOptions.map((regel) => (
+                    <Checkbox
+                        key={regel.id}
+                        type="checkbox"
+                        id={`vilkar-${regel.id}`}
+                        value={regel.id}
+                        onChange={(e) => {
+                            const id = e.target.value
+                            setSelectedCustomVilkarIds((prev) =>
+                                prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
+                            )
+                        }}
+                    >
+                        {regel.navn}
+                    </Checkbox>
+                ))}
+            </CheckboxGroup>
+
+            <Button
+                className="mt-2"
+                variant="primary"
+                size="small"
+                onClick={() => {
+                    selectedCustomVilkarIds.forEach((regelId) => leggTilNyttVilkaar({ request: { regelId } }))
+                    setSelectedCustomVilkarIds([]) // Nullstill valgene etterpå
+                    setAdding(false)
+                }}
+                disabled={selectedCustomVilkarIds.length === 0} // Deaktiver knappen hvis ingen er valgt
+            >
+                Legg til valgte
+            </Button>
+            <Button
+                className="mt-2 ml-4"
+                variant="secondary-neutral"
+                size="small"
+                onClick={() => {
+                    setAdding(false)
+                }}
+            >
+                Avbryt
+            </Button>
         </div>
     )
 }

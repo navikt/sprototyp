@@ -27,7 +27,7 @@ const fellesRegler = [
         ],
     },
     {
-        navn: 'Den sykemeldte har tilstrekkelig opptjening',
+        navn: 'Den sykmeldte har tilstrekkelig opptjening',
         id: 'R4',
         unntakbar: true,
         lovverk: [
@@ -39,7 +39,7 @@ const fellesRegler = [
         ],
     },
     {
-        navn: 'Den sykemeldte har tapt pensjonsgivende inntekt på grunn av arbeidsuførhet',
+        navn: 'Den sykmeldte har tapt pensjonsgivende inntekt på grunn av arbeidsuførhet',
         id: 'R5',
         lovverk: [
             {
@@ -50,7 +50,7 @@ const fellesRegler = [
         ],
     },
     {
-        navn: 'Den sykemeldte oppfyller minstekrav til sykepengegrunnlag',
+        navn: 'Den sykmeldte oppfyller minstekrav til sykepengegrunnlag',
         id: 'R6',
         lovverk: [
             {
@@ -65,7 +65,7 @@ const fellesRegler = [
 
 const utenriksfartRegler: Regel[] = [
     {
-        navn: 'Den sykemeldte er ansatt på et norsk skip i utenriksfart',
+        navn: 'Den sykmeldte er ansatt på et norsk skip i utenriksfart',
         id: 'R2',
         lovverk: [
             {
@@ -78,7 +78,7 @@ const utenriksfartRegler: Regel[] = [
         ],
     },
     {
-        navn: 'Det sykemeldte er arbeidsufør som arbeidstaker på skip',
+        navn: 'Den sykmeldte er arbeidsufør som arbeidstaker på skip',
         id: 'R3',
         lovverk: [
             {
@@ -110,4 +110,5 @@ export const regler: Regel[] = [...fellesRegler, ...utenriksfartRegler]
 export const sakstyper: { [key: string]: string[] } = {
     Sjømenn: ['R1', 'R2', 'R3', 'R4', 'R4_U', 'R5', 'R6'],
     'Midlertidig ute av inntektsgivende arbeid': ['R1', 'R4', 'R5', 'R6'],
+    Annet: ['R1'],
 }
