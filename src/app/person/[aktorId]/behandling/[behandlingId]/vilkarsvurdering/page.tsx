@@ -24,6 +24,7 @@ import { useNyttVilkaar } from '@hooks/mutations/useNyttVilkaar'
 import { useUpdateVilkaar } from '@hooks/mutations/useUpdateVilkar'
 import { useBehandling } from '@hooks/queries/useBehandling'
 import { useUpdateBehandling } from '@hooks/mutations/useUpdateBehandling'
+import { NesteSteg } from '@components/nestesteg/NesteSteg'
 
 export default function Page(): ReactElement {
     const { data: behandling } = useBehandling()
@@ -43,65 +44,68 @@ export default function Page(): ReactElement {
 
     const alleVilkarUndefined = vilkar?.every((v) => v.vurdering === undefined)
     return (
-        <div className="mt-4">
-            <div className="mb-4">
-                <Select size="small" label="Sakstype" value={behandling?.sakstype} onChange={handleCaseTypeChange}>
-                    {!behandling?.sakstype && <option value="velg">-- Velg sakstype --</option>}
-                    {Object.keys(sakstyper).map((sakstype) => {
-                        return (
-                            <option key={sakstype} value={sakstype}>
-                                {sakstype}
-                            </option>
-                        )
-                    })}
-                </Select>
+        <>
+            <div className="mt-4">
+                <div className="mb-4">
+                    <Select size="small" label="Sakstype" value={behandling?.sakstype} onChange={handleCaseTypeChange}>
+                        {!behandling?.sakstype && <option value="velg">-- Velg sakstype --</option>}
+                        {Object.keys(sakstyper).map((sakstype) => {
+                            return (
+                                <option key={sakstype} value={sakstype}>
+                                    {sakstype}
+                                </option>
+                            )
+                        })}
+                    </Select>
+                </div>
+
+                {behandling?.sakstype && (
+                    <>
+                        <Table size="small" className="mb-8">
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell>
+                                        {alleVilkarUndefined && (vilkar?.length || 0) > 0 && (
+                                            <Button
+                                                size="small"
+                                                variant="tertiary"
+                                                icon={
+                                                    <CheckmarkCircleFillIcon
+                                                        color="var(--a-icon-success)"
+                                                        title="check alle"
+                                                    />
+                                                }
+                                                onClick={() => {
+                                                    vilkar?.forEach((v) => {
+                                                        const oppdatering = { ...v, vurdering: 'ja' }
+                                                        updateVilkar({ request: oppdatering })
+                                                    })
+                                                }}
+                                            />
+                                        )}
+                                    </Table.HeaderCell>
+                                    <Table.HeaderCell scope="col">
+                                        <BodyShort className="font-bold">Vilkår</BodyShort>
+                                    </Table.HeaderCell>
+                                    <Table.HeaderCell scope="col">
+                                        <BodyShort className="font-bold">Vurdering</BodyShort>
+                                    </Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                {(vilkar || []).map((v) => {
+                                    //TODO enb sortering
+                                    return <EnkeltVilkarRad key={v.id} vilkarsvurdering={v} />
+                                })}
+                            </Table.Body>
+                        </Table>
+
+                        <LeggTilVilkar />
+                    </>
+                )}
             </div>
-
-            {behandling?.sakstype && (
-                <>
-                    <Table size="small" className="mb-8">
-                        <Table.Header>
-                            <Table.Row>
-                                <Table.HeaderCell>
-                                    {alleVilkarUndefined && (vilkar?.length || 0) > 0 && (
-                                        <Button
-                                            size="small"
-                                            variant="tertiary"
-                                            icon={
-                                                <CheckmarkCircleFillIcon
-                                                    color="var(--a-icon-success)"
-                                                    title="check alle"
-                                                />
-                                            }
-                                            onClick={() => {
-                                                vilkar?.forEach((v) => {
-                                                    const oppdatering = { ...v, vurdering: 'ja' }
-                                                    updateVilkar({ request: oppdatering })
-                                                })
-                                            }}
-                                        />
-                                    )}
-                                </Table.HeaderCell>
-                                <Table.HeaderCell scope="col">
-                                    <BodyShort className="font-bold">Vilkår</BodyShort>
-                                </Table.HeaderCell>
-                                <Table.HeaderCell scope="col">
-                                    <BodyShort className="font-bold">Vurdering</BodyShort>
-                                </Table.HeaderCell>
-                            </Table.Row>
-                        </Table.Header>
-                        <Table.Body>
-                            {(vilkar || []).map((v) => {
-                                //TODO enb sortering
-                                return <EnkeltVilkarRad key={v.id} vilkarsvurdering={v} />
-                            })}
-                        </Table.Body>
-                    </Table>
-
-                    <LeggTilVilkar />
-                </>
-            )}
-        </div>
+            <NesteSteg nesteFane="dagoversikt" />
+        </>
     )
 }
 
