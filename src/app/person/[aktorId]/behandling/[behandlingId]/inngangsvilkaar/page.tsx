@@ -9,7 +9,7 @@ export default function Page(): ReactElement {
     return (
         <>
             <Alert variant="info" className="my-8">
-                Her avklarer man første inngangsilkår som ikke krever at sykepengegrunnlaget er satt. Foreløpig bare et
+                Her avklarer man første inngangsvilkår som ikke krever at sykepengegrunnlaget er satt. Foreløpig bare et
                 røft utkast. Hva hvis forlengelse?
             </Alert>
 
