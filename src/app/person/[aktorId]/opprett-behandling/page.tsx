@@ -161,9 +161,7 @@ export default function Page(): ReactElement {
                         const skjaring = selectedDay?.toISOString().split('T')[0] ?? ''
                         mutation.mutate({
                             callback: (behandlingId) =>
-                                router.push(
-                                    `/person/${params.aktorId}/behandling/${behandlingId.id}/sykepengegrunnlag`,
-                                ),
+                                router.push(`/person/${params.aktorId}/behandling/${behandlingId.id}/inntektsforhold`),
                             request: { fom, tom, skjaring, soknadIder: selectedSoknader },
                         })
                     }}

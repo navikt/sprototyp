@@ -2,8 +2,8 @@
 
 import React, { ReactElement } from 'react'
 
-import { Sykepengegrunnlag } from '@components/sykepengegrunnlag/Sykepengegrunnlag'
+import { Inntektsforhold } from '@components/inntektsforhold/Inntektsforhold'
 
 export default function Page(): ReactElement {
-    return <Sykepengegrunnlag />
+    return <Inntektsforhold />
 }

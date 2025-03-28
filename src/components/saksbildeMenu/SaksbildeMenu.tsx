@@ -8,8 +8,8 @@ export const SaksbildeMenu = ({ disabled }: { disabled: boolean }): ReactElement
         <SaksbildeMenuWrapper>
             <HStack>
                 <HStack as="nav" role="tablist">
-                    <NavLenke to="inngangsvilkaar" tittel="Inngangsvilkår" disabled={disabled} />
                     <NavLenke to="inntektsforhold" tittel="Inntektsforhold" disabled={disabled} />
+                    <NavLenke to="inngangsvilkaar" tittel="Inngangsvilkår" disabled={disabled} />
                     <NavLenke to="sykepengegrunnlag" tittel="Sykepengegrunnlag" disabled={disabled} />
                     <NavLenke to="vilkarsvurdering" tittel="Vilkårsvurdering" disabled={disabled} />
                     <NavLenke to="dagoversikt" tittel="Dagoversikt" disabled={disabled} />
