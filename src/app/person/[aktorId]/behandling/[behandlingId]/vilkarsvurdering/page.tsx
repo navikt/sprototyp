@@ -33,10 +33,11 @@ export default function Page(): ReactElement {
     const { mutate: oppdaterBehandling } = useUpdateBehandling()
 
     useEffect(() => {
+        if (behandling?.sakstype === 'Annet') return
         oppdaterBehandling({ request: { sakstype: 'Annet' } })
         const reglerFraCase = sakstyper['Annet']
         leggTilNyeVilkaar({ request: { vilkar: reglerFraCase } })
-    }, [leggTilNyeVilkaar, oppdaterBehandling])
+    }, [behandling?.sakstype, leggTilNyeVilkaar, oppdaterBehandling])
 
     const { mutate: updateVilkar } = useUpdateVilkaar()
 
