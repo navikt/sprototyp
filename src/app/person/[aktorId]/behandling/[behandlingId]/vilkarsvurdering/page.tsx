@@ -1,12 +1,11 @@
 'use client'
 
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement, useEffect, useState } from 'react'
 import {
     BodyShort,
     Radio,
     RadioGroup,
     Table,
-    Select,
     Button,
     Textarea,
     Detail,
@@ -33,12 +32,11 @@ export default function Page(): ReactElement {
     const { mutate: leggTilNyeVilkaar } = useNyeVilkaar()
     const { mutate: oppdaterBehandling } = useUpdateBehandling()
 
-    // Ved bytte av sakstype tømmes egendefinerte vilkår
-    const handleCaseTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        oppdaterBehandling({ request: { sakstype: e.target.value } })
-        const reglerFraCase = sakstyper[e.target.value]
+    useEffect(() => {
+        oppdaterBehandling({ request: { sakstype: 'Annet' } })
+        const reglerFraCase = sakstyper['Annet']
         leggTilNyeVilkaar({ request: { vilkar: reglerFraCase } })
-    }
+    }, [leggTilNyeVilkaar, oppdaterBehandling])
 
     const { mutate: updateVilkar } = useUpdateVilkaar()
 
@@ -46,19 +44,6 @@ export default function Page(): ReactElement {
     return (
         <>
             <div className="mt-4">
-                <div className="mb-4">
-                    <Select size="small" label="Sakstype" value={behandling?.sakstype} onChange={handleCaseTypeChange}>
-                        {!behandling?.sakstype && <option value="velg">-- Velg sakstype --</option>}
-                        {Object.keys(sakstyper).map((sakstype) => {
-                            return (
-                                <option key={sakstype} value={sakstype}>
-                                    {sakstype}
-                                </option>
-                            )
-                        })}
-                    </Select>
-                </div>
-
                 {behandling?.sakstype && (
                     <>
                         <Table size="small" className="mb-8">
@@ -85,7 +70,7 @@ export default function Page(): ReactElement {
                                         )}
                                     </Table.HeaderCell>
                                     <Table.HeaderCell scope="col">
-                                        <BodyShort className="font-bold">Vilkår</BodyShort>
+                                        <BodyShort className="font-bold">Regel</BodyShort>
                                     </Table.HeaderCell>
                                     <Table.HeaderCell scope="col">
                                         <BodyShort className="font-bold">Vurdering</BodyShort>
@@ -131,7 +116,7 @@ function LeggTilVilkar() {
                     setAdding(true)
                 }}
             >
-                Legg til egendefinerte vilkår
+                Legg til regel
             </Button>
         )
     }
@@ -234,7 +219,6 @@ function EnkeltVilkarRad({ vilkarsvurdering }: { vilkarsvurdering: Vilkarsvurder
                         >
                             <Radio value="ja">Ja</Radio>
                             <Radio value="nei">Nei</Radio>
-                            <Radio value="unntak">Unntak</Radio>
                         </RadioGroup>
                         <Textarea className="mb-4" size="small" label="Notat til beslutter" />
                         <div className="flex justify-between">
