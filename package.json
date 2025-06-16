@@ -33,7 +33,7 @@
         "motion": "^12.16.0",
         "next": "^15.3.3",
         "nextleton": "^0.6.1",
-        "postcss": "8.5.4",
+        "postcss": "8.5.5",
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "remeda": "^2.23.0",
