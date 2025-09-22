@@ -30,7 +30,7 @@
         "autoprefixer": "10.4.21",
         "classnames": "^2.5.1",
         "dayjs": "^1.11.18",
-        "motion": "^12.23.12",
+        "motion": "^12.23.16",
         "next": "^15.5.3",
         "nextleton": "^0.6.1",
         "postcss": "8.5.6",
